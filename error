@@ -1,232 +1,129 @@
-vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::qwen4_exp_ple_short_conv', 'vllm::qwen4_exp_qsa_with_output', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
-(EngineCore pid=13049) INFO 10-07 07:12:31 [parallel_state.py:1825] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_2eecb6dce46a4abeabf847e31e1c2101 backend=nccl
-(EngineCore pid=13049) INFO 10-07 07:12:35 [parallel_state.py:2269] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
-(EngineCore pid=13049) INFO 10-07 07:12:35 [gpu_worker.py:479] Using V2 Model Runner
-(EngineCore pid=13049) INFO 10-07 07:12:36 [model_runner.py:375] Loading model from scratch...
-(EngineCore pid=13049) INFO 10-07 07:12:36 [cuda.py:526] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
-(EngineCore pid=13049) INFO 10-07 07:12:36 [flash_attn.py:1167] Using FlashAttention version 3
-(EngineCore pid=13049) INFO 10-07 07:12:38 [weight_utils.py:1063] Filesystem type for checkpoints: EXT4. Checkpoint size: 15.26 GiB. Available RAM: 306.23 GiB.
-(EngineCore pid=13049) INFO 10-07 07:12:38 [weight_utils.py:1086] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+(EngineCore pid=15220) INFO 10-07 08:27:39 [parallel_state.py:1825] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_1b5aa4401a5846218e08dc9e1694269a backend=nccl
+(EngineCore pid=15220) INFO 10-07 08:27:43 [parallel_state.py:2269] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=15220) INFO 10-07 08:27:43 [gpu_worker.py:479] Using V2 Model Runner
+(EngineCore pid=15220) INFO 10-07 08:27:43 [model_runner.py:375] Loading model from scratch...
+(EngineCore pid=15220) INFO 10-07 08:27:44 [cuda.py:526] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=15220) INFO 10-07 08:27:44 [flash_attn.py:1167] Using FlashAttention version 3
+(EngineCore pid=15220) INFO 10-07 08:27:46 [weight_utils.py:1063] Filesystem type for checkpoints: EXT4. Checkpoint size: 15.26 GiB. Available RAM: 306.22 GiB.
+(EngineCore pid=15220) INFO 10-07 08:27:46 [weight_utils.py:1086] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
 Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:00<00:00,  
-(EngineCore pid=13049) INFO 10-07 07:12:39 [default_loader.py:484] Loading weights took 1.00 seconds
-(EngineCore pid=13049) INFO 10-07 07:12:40 [model_runner.py:407] Model loading took 15.27 GiB memory and 4.175372 seconds
-(EngineCore pid=13049) INFO 10-07 07:12:40 [topk_topp_sampler.py:124] Using FlashInfer for top-p & top-k sampling.
-(EngineCore pid=13049) INFO 10-07 07:12:40 [torch_utils.py:286] Reducing Torch threads from 40 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
-(EngineCore pid=13049) INFO 10-07 07:12:40 [utils.py:343] Using LBNHC KV cache layout.
-(EngineCore pid=13049) INFO 10-07 07:12:47 [backends.py:1090] Using cache directory: /home/kunwar.zaid/.cache/vllm/torch_compile_cache/2293804d6d/rank_0_0/backbone for vLLM's torch.compile
-(EngineCore pid=13049) INFO 10-07 07:12:47 [backends.py:1151] Dynamo bytecode transform time: 6.39 s
-/tmp/tmps3c2op4v/cuda_utils.c:9:10: fatal error: Python.h: No such file or directory
-    9 | #include <Python.h>
-      |          ^~~~~~~~~~
-compilation terminated.
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433] EngineCore failed to start.
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433] Traceback (most recent call last):
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     super().__init__(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 151, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     kv_cache_config = self._initialize_kv_caches(vllm_config)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 309, in _initialize_kv_caches
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     available_gpu_memory = self.model_executor.determine_available_memory()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 150, in determine_available_memory
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self.collective_rpc("determine_available_memory")
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     result = run_method(self.driver_worker, method, args, kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 508, in run_method
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 626, in determine_available_memory
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.model_runner.profile_run(randomize_inputs=self.randomize_dummy_inputs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 973, in profile_run
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     hidden_states, sample_hidden_states = self._dummy_run(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                                           ^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/eplb_utils.py", line 27, in wrapper
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     result = fn(self, *args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 861, in _dummy_run
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.execute_model(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2007, in execute_model
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     model_output = self.model(**model_inputs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self._call_impl(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return forward_call(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/qwen3.py", line 326, in forward
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     hidden_states = self.model(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                     ^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/decorators.py", line 672, in __call__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.aot_compiled_fn = self.aot_compile(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/wrapper.py", line 168, in aot_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self._compiled_callable.aot_compile((args, kwargs))
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 964, in aot_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return aot_compile_fullgraph(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 396, in aot_compile_fullgraph
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     compiled_fn = backend(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                   ^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/__init__.py", line 2568, in __call__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self.compiler_fn(model_, inputs_, **self.kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/usr/lib/python3.12/contextlib.py", line 81, in inner
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwds)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 1218, in __call__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     PiecewiseCompileInterpreter(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 724, in run
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return super().run(*args)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 197, in run
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.env[node] = self.run_node(node)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 294, in run_node
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return getattr(self, n.op)(n.target, args, kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 751, in call_module
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     piecewise_backend = PiecewiseBackend(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                         ^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/piecewise_backend.py", line 189, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.compile_all_ranges()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/piecewise_backend.py", line 265, in compile_all_ranges
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     range_entry.runnable = self.vllm_backend.compiler_manager.compile(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 351, in compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     compiled_graph, handle = self.compiler.compile(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                              ^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/compiler_interface.py", line 370, in compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     compiled_graph = standalone_compile(graph, example_inputs, **compile_kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/__init__.py", line 452, in standalone_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return standalone_compile(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/standalone_compile.py", line 510, in standalone_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     compiled_fn = compile_fx(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                   ^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2723, in compile_fx
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return compile_fx(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2782, in compile_fx
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return _maybe_wrap_and_compile_fx_main(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2863, in _maybe_wrap_and_compile_fx_main
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return _compile_fx_main(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 3076, in _compile_fx_main
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1020, in _compile_fx_inner
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     raise InductorError(e, currentframe()).with_traceback(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1004, in _compile_fx_inner
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     mb_compiled_graph = fx_codegen_and_compile(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                         ^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1847, in fx_codegen_and_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1608, in codegen_and_compile
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     compiled_module = graph.compile_to_module()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                       ^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2669, in compile_to_module
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self._compile_to_module()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2675, in _compile_to_module
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.codegen_with_cpp_wrapper() if self.cpp_wrapper else self.codegen()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                                                              ^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2607, in codegen
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self._update_scheduler()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2601, in _update_scheduler
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.scheduler = Scheduler(self.operations)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 4036, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self._init(nodes)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 4165, in _init
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.create_combo_kernel_nodes(num_ck_nodes=None)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 6141, in create_combo_kernel_nodes
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     if len(window) < 2 or not self.speedup_by_combo_kernel(window):
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 9592, in speedup_by_combo_kernel
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     ms, path = self.benchmark_fused_nodes(node_list)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 5048, in benchmark_fused_nodes
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return backend.benchmark_fused_nodes(nodes)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/cuda_combined_scheduling.py", line 169, in benchmark_fused_nodes
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return self._triton_scheduling.benchmark_fused_nodes(nodes)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 7325, in benchmark_fused_nodes
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     src_code = self.generate_kernel_code_from_nodes(nodes, benchmark_kernel=True)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/simd.py", line 4510, in generate_kernel_code_from_nodes
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     src_code = kernel.codegen_kernel()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                ^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 6477, in codegen_kernel
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     **self.inductor_meta_common(),
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 6187, in inductor_meta_common
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     "backend_hash": torch.utils._triton.triton_hash_with_backend(),
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_triton.py", line 253, in triton_hash_with_backend
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     backend = triton_backend()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]               ^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_triton.py", line 223, in triton_backend
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     target = driver.active.get_current_target()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]              ^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 39, in active
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self._active = self.default
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                    ^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 33, in default
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self._default = _create_driver()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                     ^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 21, in _create_driver
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     return active_drivers[0]()
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/driver.py", line 336, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     self.utils = CudaUtils()  # TODO: make static
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]                  ^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/driver.py", line 66, in __init__
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     mod = compile_module_from_src(
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]           ^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/build.py", line 93, in compile_module_from_src
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     so = _build(name, src_path, tmpdir, library_dirs or [], include_dirs or [], libraries or [], ccflags or [])
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/build.py", line 48, in _build
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     subprocess.check_call(cc_cmd, stdout=subprocess.DEVNULL)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]   File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433]     raise CalledProcessError(retcode, cmd)
-(EngineCore pid=13049) ERROR 10-07 07:12:48 [core.py:1433] torch._inductor.exc.InductorError: CalledProcessError: Command '['/usr/bin/gcc', '/tmp/tmps3c2op4v/cuda_utils.c', '-O3', '-shared', '-fPIC', '-Wno-psabi', '-o', '/tmp/tmps3c2op4v/cuda_utils.cpython-312-x86_64-linux-gnu.so', '-l:libcuda.so.1', '-L/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/lib', '-L/lib/x86_64-linux-gnu', '-I/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/include', '-I/tmp/tmps3c2op4v', '-I/usr/include/python3.12']' returned non-zero exit status 1.
+(EngineCore pid=15220) INFO 10-07 08:27:47 [default_loader.py:484] Loading weights took 1.00 seconds
+(EngineCore pid=15220) INFO 10-07 08:27:47 [model_runner.py:407] Model loading took 15.27 GiB memory and 4.192716 seconds
+(EngineCore pid=15220) INFO 10-07 08:27:47 [topk_topp_sampler.py:124] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=15220) INFO 10-07 08:27:47 [torch_utils.py:286] Reducing Torch threads from 40 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+(EngineCore pid=15220) INFO 10-07 08:27:47 [utils.py:343] Using LBNHC KV cache layout.
+(EngineCore pid=15220) INFO 10-07 08:27:54 [backends.py:1090] Using cache directory: /home/kunwar.zaid/.cache/vllm/torch_compile_cache/2293804d6d/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=15220) INFO 10-07 08:27:54 [backends.py:1151] Dynamo bytecode transform time: 6.25 s
+(EngineCore pid=15220) INFO 10-07 08:28:13 [backends.py:391] Compiling a graph for compile range (1, 16384) takes 18.13 s
+(EngineCore pid=15220) INFO 10-07 08:28:17 [backends.py:916] collected artifacts: 37 entries, 3 artifacts, 6140319 bytes total
+(EngineCore pid=15220) INFO 10-07 08:28:17 [decorators.py:717] saved AOT compiled function to /home/kunwar.zaid/.cache/vllm/torch_compile_cache/torch_aot_compile/33143a85731f3244abec6124eb49b6de1a8e1deb76d5b99fcf48f56f30591f15/rank_0_0/model
+(EngineCore pid=15220) INFO 10-07 08:28:17 [monitor.py:53] torch.compile took 28.53 s in total
+(EngineCore pid=15220) INFO 10-07 08:28:17 [monitor.py:81] Initial profiling/warmup run took 0.07 s
+Capturing CUDA graphs (PIECEWISE): 100%|███| 51/51 [00:02<00:00, 18.49it/s]
+Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 31.73it/s]
+(EngineCore pid=15220) INFO 10-07 08:28:22 [model_runner.py:1087] Graph capturing finished in 4 secs, took 0.62 GiB
+(EngineCore pid=15220) INFO 10-07 08:28:23 [gpu_worker.py:692] Available KV cache memory: 65.18 GiB
+(EngineCore pid=15220) INFO 10-07 08:28:23 [gpu_worker.py:707] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.9000 is equivalent to --gpu-memory-utilization=0.8900 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.9100. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(EngineCore pid=15220) INFO 10-07 08:28:23 [kv_cache_utils.py:2464] GPU KV cache size: 474,592 tokens, Maximum concurrency for 40,960 tokens per request: 11.59x
+(EngineCore pid=15220) INFO 10-07 08:28:23 [kernel_warmup.py:172] JIT kernel warmup starting.
+(EngineCore pid=15220) INFO 10-07 08:28:23 [kernel_warmup.py:185] JIT kernel warmup finished in 0.00s.
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] EngineCore failed to start.
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] Traceback (most recent call last):
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     super().__init__(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 151, in __init__
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 357, in _initialize_kv_caches
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.model_executor.compile_or_warm_up_model()
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 128, in compile_or_warm_up_model
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     compilation_times: list[CompilationTimes] = self.collective_rpc(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                                 ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 508, in run_method
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 876, in compile_or_warm_up_model
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     warmup_kernels(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 235, in warmup_kernels
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     _warmup_kernels(model_runner, worker_execute_model, worker_sample_tokens)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 373, in _warmup_kernels
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     worker_sample_tokens(grammar_output)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 1217, in sample_tokens
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return self.model_runner.sample_tokens(grammar_output)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/eplb_utils.py", line 27, in wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     result = fn(self, *args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2096, in sample_tokens
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampler_output, num_sampled, num_rejected = self.sample(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                                 ^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 1600, in sample
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampler_output = self.sampler(logits, input_batch)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 154, in __call__
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampled, processed_logits = self.sample(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                 ^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 314, in sample
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return self._sample_random(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 336, in _sample_random
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampled = flashinfer_sample(processed_logits, top_k, top_p).to(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/sample/ops/topk_topp_sampler.py", line 602, in flashinfer_sample
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     next_token_ids = flashinfer.sampling.top_k_top_p_sampling_from_logits(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return _inner(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1547, in top_k_top_p_sampling_from_logits
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     masked_logits = top_k_mask_logits(logits, top_k)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return _inner(*args, **kwargs)
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1974, in top_k_mask_logits
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return get_sampling_module().top_k_mask_logits(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 68, in get_sampling_module
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     module = gen_sampling_module().build_and_load()
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 335, in build_and_load
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.build()
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 562, in build
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.write_ninja()
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 490, in write_ninja
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     content = generate_ninja_build_for_op(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 250, in generate_ninja_build_for_op
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     cuda_home = get_cuda_path()
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                 ^^^^^^^^^^^^^^^
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 61, in get_cuda_path
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     raise RuntimeError(
+(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] RuntimeError: Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist
 Process EngineCore:
 Traceback (most recent call last):
   File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
@@ -249,199 +146,88 @@ Traceback (most recent call last):
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 309, in _initialize_kv_caches
-    available_gpu_memory = self.model_executor.determine_available_memory()
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 150, in determine_available_memory
-    return self.collective_rpc("determine_available_memory")
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 357, in _initialize_kv_caches
+    self.model_executor.compile_or_warm_up_model()
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 128, in compile_or_warm_up_model
+    compilation_times: list[CompilationTimes] = self.collective_rpc(
+                                                ^^^^^^^^^^^^^^^^^^^^
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
     result = run_method(self.driver_worker, method, args, kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 508, in run_method
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 876, in compile_or_warm_up_model
+    warmup_kernels(
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 626, in determine_available_memory
-    self.model_runner.profile_run(randomize_inputs=self.randomize_dummy_inputs)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 235, in warmup_kernels
+    _warmup_kernels(model_runner, worker_execute_model, worker_sample_tokens)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 373, in _warmup_kernels
+            worker_sample_tokens(grammar_output)
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 973, in profile_run
-    hidden_states, sample_hidden_states = self._dummy_run(
-                                          ^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 1217, in sample_tokens
+    return self.model_runner.sample_tokens(grammar_output)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/eplb_utils.py", line 27, in wrapper
     result = fn(self, *args, **kwargs)
              ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 861, in _dummy_run
-    self.execute_model(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2096, in sample_tokens
+    sampler_output, num_sampled, num_rejected = self.sample(
+                                                ^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 1600, in sample
+    sampler_output = self.sampler(logits, input_batch)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 154, in __call__
+    sampled, processed_logits = self.sample(
+                                ^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 314, in sample
+    return self._sample_random(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 336, in _sample_random
+    sampled = flashinfer_sample(processed_logits, top_k, top_p).to(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/sample/ops/topk_topp_sampler.py", line 602, in flashinfer_sample
+    next_token_ids = flashinfer.sampling.top_k_top_p_sampling_from_logits(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
+    return _inner(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1547, in top_k_top_p_sampling_from_logits
+    masked_logits = top_k_mask_logits(logits, top_k)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
+    return _inner(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1974, in top_k_mask_logits
+    return get_sampling_module().top_k_mask_logits(
            ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2007, in execute_model
-    model_output = self.model(**model_inputs)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/qwen3.py", line 326, in forward
-    hidden_states = self.model(
-                    ^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/decorators.py", line 672, in __call__
-    self.aot_compiled_fn = self.aot_compile(*args, **kwargs)
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/wrapper.py", line 168, in aot_compile
-    return self._compiled_callable.aot_compile((args, kwargs))
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 964, in aot_compile
-    return aot_compile_fullgraph(
-           ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 396, in aot_compile_fullgraph
-    compiled_fn = backend(
-                  ^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/__init__.py", line 2568, in __call__
-    return self.compiler_fn(model_, inputs_, **self.kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/contextlib.py", line 81, in inner
-    return func(*args, **kwds)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 1218, in __call__
-    PiecewiseCompileInterpreter(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 724, in run
-    return super().run(*args)
-           ^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 197, in run
-    self.env[node] = self.run_node(node)
-                     ^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 294, in run_node
-    return getattr(self, n.op)(n.target, args, kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 751, in call_module
-    piecewise_backend = PiecewiseBackend(
-                        ^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/piecewise_backend.py", line 189, in __init__
-    self.compile_all_ranges()
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/piecewise_backend.py", line 265, in compile_all_ranges
-    range_entry.runnable = self.vllm_backend.compiler_manager.compile(
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/backends.py", line 351, in compile
-    compiled_graph, handle = self.compiler.compile(
-                             ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/compilation/compiler_interface.py", line 370, in compile
-    compiled_graph = standalone_compile(graph, example_inputs, **compile_kwargs)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/__init__.py", line 452, in standalone_compile
-    return standalone_compile(
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/standalone_compile.py", line 510, in standalone_compile
-    compiled_fn = compile_fx(
-                  ^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2723, in compile_fx
-    return compile_fx(
-           ^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2782, in compile_fx
-    return _maybe_wrap_and_compile_fx_main(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 2863, in _maybe_wrap_and_compile_fx_main
-    return _compile_fx_main(
-           ^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 3076, in _compile_fx_main
-    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1020, in _compile_fx_inner
-    raise InductorError(e, currentframe()).with_traceback(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1004, in _compile_fx_inner
-    mb_compiled_graph = fx_codegen_and_compile(
-                        ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1847, in fx_codegen_and_compile
-    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/compile_fx.py", line 1608, in codegen_and_compile
-    compiled_module = graph.compile_to_module()
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2669, in compile_to_module
-    return self._compile_to_module()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2675, in _compile_to_module
-    self.codegen_with_cpp_wrapper() if self.cpp_wrapper else self.codegen()
-                                                             ^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2607, in codegen
-    self._update_scheduler()
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/graph.py", line 2601, in _update_scheduler
-    self.scheduler = Scheduler(self.operations)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 4036, in __init__
-    self._init(nodes)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 4165, in _init
-    self.create_combo_kernel_nodes(num_ck_nodes=None)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 6141, in create_combo_kernel_nodes
-    if len(window) < 2 or not self.speedup_by_combo_kernel(window):
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 9592, in speedup_by_combo_kernel
-    ms, path = self.benchmark_fused_nodes(node_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/scheduler.py", line 5048, in benchmark_fused_nodes
-    return backend.benchmark_fused_nodes(nodes)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/cuda_combined_scheduling.py", line 169, in benchmark_fused_nodes
-    return self._triton_scheduling.benchmark_fused_nodes(nodes)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 7325, in benchmark_fused_nodes
-    src_code = self.generate_kernel_code_from_nodes(nodes, benchmark_kernel=True)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/simd.py", line 4510, in generate_kernel_code_from_nodes
-    src_code = kernel.codegen_kernel()
-               ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 6477, in codegen_kernel
-    **self.inductor_meta_common(),
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/_inductor/codegen/triton.py", line 6187, in inductor_meta_common
-    "backend_hash": torch.utils._triton.triton_hash_with_backend(),
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_triton.py", line 253, in triton_hash_with_backend
-    backend = triton_backend()
-              ^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_triton.py", line 223, in triton_backend
-    target = driver.active.get_current_target()
-             ^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 39, in active
-    self._active = self.default
-                   ^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 33, in default
-    self._default = _create_driver()
-                    ^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/driver.py", line 21, in _create_driver
-    return active_drivers[0]()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/driver.py", line 336, in __init__
-    self.utils = CudaUtils()  # TODO: make static
-                 ^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/driver.py", line 66, in __init__
-    mod = compile_module_from_src(
-          ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/build.py", line 93, in compile_module_from_src
-    so = _build(name, src_path, tmpdir, library_dirs or [], include_dirs or [], libraries or [], ccflags or [])
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/runtime/build.py", line 48, in _build
-    subprocess.check_call(cc_cmd, stdout=subprocess.DEVNULL)
-  File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
-    raise CalledProcessError(retcode, cmd)
-torch._inductor.exc.InductorError: CalledProcessError: Command '['/usr/bin/gcc', '/tmp/tmps3c2op4v/cuda_utils.c', '-O3', '-shared', '-fPIC', '-Wno-psabi', '-o', '/tmp/tmps3c2op4v/cuda_utils.cpython-312-x86_64-linux-gnu.so', '-l:libcuda.so.1', '-L/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/lib', '-L/lib/x86_64-linux-gnu', '-I/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/triton/backends/nvidia/include', '-I/tmp/tmps3c2op4v', '-I/usr/include/python3.12']' returned non-zero exit status 1.
-(MainProcess pid=12885) INFO 10-07 07:12:50 [utils.py:638] [shutdown] Process manager: send sigterm to process EngineCore
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 68, in get_sampling_module
+    module = gen_sampling_module().build_and_load()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 335, in build_and_load
+    self.build()
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 562, in build
+    self.write_ninja()
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 490, in write_ninja
+    content = generate_ninja_build_for_op(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 250, in generate_ninja_build_for_op
+    cuda_home = get_cuda_path()
+                ^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 61, in get_cuda_path
+    raise RuntimeError(
+RuntimeError: Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist
+(MainProcess pid=15072) INFO 10-07 08:28:25 [utils.py:638] [shutdown] Process manager: send sigterm to process EngineCore
 Traceback (most recent call last):
   File "/home/kunwar.zaid/ICON/qwen-baseline.py", line 11, in <module>
     llm = LLM(
@@ -472,4 +258,3 @@ Traceback (most recent call last):
   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1348, in wait_for_engine_startup
     raise RuntimeError(
 RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
-(.venv) kunwar.zaid@aai-a100-gpu-linux-vm:~/ICON$ 
