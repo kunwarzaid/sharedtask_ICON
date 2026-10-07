@@ -1,0 +1,276 @@
+(MainProcess pid=7893) INFO 10-07 06:38:48 [api_utils.py:286] non-default args: {'dtype': 'bfloat16', 'gpu_memory_utilization': 0.9, 'disable_log_stats': True, 'model': 'Qwen/Qwen3-8B'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+(MainProcess pid=7893) INFO 10-07 06:38:52 [model.py:699] Resolved architecture: Qwen3ForCausalLM
+(MainProcess pid=7893) INFO 10-07 06:38:52 [model.py:2109] Using max model len 40960
+(MainProcess pid=7893) INFO 10-07 06:38:52 [scheduler.py:308] Chunked prefill is enabled with max_num_batched_tokens=16384.
+(MainProcess pid=7893) INFO 10-07 06:38:52 [kernel.py:408] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native'])
+(EngineCore pid=8052) INFO 10-07 06:38:55 [core.py:129] Initializing a V1 LLM engine (v0.31.0) with config: model='Qwen/Qwen3-8B', speculative_config=None, tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=main, tokenizer_revision=main, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, aux_output_config=AuxOutputConfig(enable_return_routed_experts=False, max_bytes=None), kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::qwen4_exp_ple_short_conv', 'vllm::qwen4_exp_qsa_with_output', 'vllm::linear_attention', 'vllm::qwen_gdn_attention_core', 'vllm::qwen_gdn_attention_core_fused_norm_packed', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::hpc_rope_norm_forward', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'], gelu_and_mul_sparse=['triton', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, moe_backend='auto', sparse_indexer_topk_backend='auto', linear_backend='auto', linear_backend_per_quant=None)
+(EngineCore pid=8052) INFO 10-07 06:38:56 [parallel_state.py:1825] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_38c530e5a8224ff0a1511aa7f4c2746b backend=nccl
+(EngineCore pid=8052) INFO 10-07 06:38:59 [parallel_state.py:2269] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=8052) INFO 10-07 06:38:59 [gpu_worker.py:479] Using V2 Model Runner
+(EngineCore pid=8052) INFO 10-07 06:39:00 [model_runner.py:375] Loading model from scratch...
+(EngineCore pid=8052) INFO 10-07 06:39:01 [cuda.py:526] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=8052) INFO 10-07 06:39:01 [flash_attn.py:1167] Using FlashAttention version 3
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433] EngineCore failed to start.
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433] Traceback (most recent call last):
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     super().__init__(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 140, in __init__
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 113, in __init__
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self._init_executor()
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 74, in _init_executor
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self.driver_worker.load_model()
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 545, in load_model
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self.model_runner.load_model(load_dummy_weights=load_dummy_weights)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 379, in load_model
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self.model = model_loader.load_model(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                  ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/base_loader.py", line 75, in load_model
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self.load_weights(model, model_config)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 481, in load_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     loaded_weights = model.load_weights(self.get_all_weights(model_config, model))
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/qwen3.py", line 340, in load_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return loader.load_weights(weights)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/reload/torchao_decorator.py", line 52, in patched_model_load_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return original_load_weights(self, *args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 460, in load_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     autoloaded_weights = set(self._load_module("", self.module, weights))
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 393, in _load_module
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     for child_prefix, child_weights in self._groupby_prefix(weights):
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 272, in _groupby_prefix
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     for prefix, group in itertools.groupby(weights_by_parts, key=lambda x: x[0][0]):
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 267, in <genexpr>
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     weights_by_parts = (
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                        ^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 467, in _filter_skipped
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     for name, weight in weights:
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 150, in apply
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     for name, data in weights:
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 363, in get_all_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     yield from self._get_weights_iterator(primary_weights)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 260, in _get_weights_iterator
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     self._prepare_weights(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 205, in _prepare_weights
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     hf_folder = download_weights_from_hf(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return func(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/weight_utils.py", line 505, in download_weights_from_hf
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     hf_folder = hf_api().snapshot_download(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return fn(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 6850, in snapshot_download
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return snapshot_download(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return fn(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 266, in _inner
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return fn(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 532, in snapshot_download
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     hf_thread_map(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/tqdm.py", line 441, in hf_thread_map
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     results[future_to_index[future]] = future.result()
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]                                        ^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return self.__get_result()
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     raise self._exception
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     result = self.fn(*self.args, **self.kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 512, in _inner_hf_hub_download
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     hf_hub_download(  # type: ignore
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return fn(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 266, in _inner
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return fn(*args, **kwargs)
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1047, in hf_hub_download
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     return _hf_hub_download_to_cache_dir(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1285, in _hf_hub_download_to_cache_dir
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     _download_to_tmp_and_move(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 2016, in _download_to_tmp_and_move
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     xet_get(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 589, in xet_get
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433]     with session.new_file_download_group(
+(EngineCore pid=8052) ERROR 10-07 06:40:19 [core.py:1433] RuntimeError: Task error: File reconstruction error: IO Error: No space left on device (os error 28)
+Process EngineCore:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1437, in run_engine_core
+    raise e
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
+    engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
+    super().__init__(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 140, in __init__
+    self.model_executor = executor_class(vllm_config)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 113, in __init__
+    self._init_executor()
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 74, in _init_executor
+    self.driver_worker.load_model()
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 545, in load_model
+    self.model_runner.load_model(load_dummy_weights=load_dummy_weights)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 379, in load_model
+    self.model = model_loader.load_model(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/base_loader.py", line 75, in load_model
+    self.load_weights(model, model_config)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 481, in load_weights
+    loaded_weights = model.load_weights(self.get_all_weights(model_config, model))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/qwen3.py", line 340, in load_weights
+    return loader.load_weights(weights)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/reload/torchao_decorator.py", line 52, in patched_model_load_weights
+    return original_load_weights(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 460, in load_weights
+    autoloaded_weights = set(self._load_module("", self.module, weights))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 393, in _load_module
+    for child_prefix, child_weights in self._groupby_prefix(weights):
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 272, in _groupby_prefix
+    for prefix, group in itertools.groupby(weights_by_parts, key=lambda x: x[0][0]):
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 267, in <genexpr>
+    weights_by_parts = (
+                       ^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 467, in _filter_skipped
+    for name, weight in weights:
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 150, in apply
+    for name, data in weights:
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 363, in get_all_weights
+    yield from self._get_weights_iterator(primary_weights)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 260, in _get_weights_iterator
+    self._prepare_weights(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/default_loader.py", line 205, in _prepare_weights
+    hf_folder = download_weights_from_hf(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/weight_utils.py", line 505, in download_weights_from_hf
+    hf_folder = hf_api().snapshot_download(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 6850, in snapshot_download
+    return snapshot_download(
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 266, in _inner
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 532, in snapshot_download
+    hf_thread_map(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/tqdm.py", line 441, in hf_thread_map
+    results[future_to_index[future]] = future.result()
+                                       ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 512, in _inner_hf_hub_download
+    hf_hub_download(  # type: ignore
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 266, in _inner
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1047, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1285, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 2016, in _download_to_tmp_and_move
+    xet_get(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 589, in xet_get
+    with session.new_file_download_group(
+RuntimeError: Task error: File reconstruction error: IO Error: No space left on device (os error 28)
+(MainProcess pid=7893) INFO 10-07 06:40:19 [utils.py:638] [shutdown] Process manager: send sigterm to process EngineCore
+Traceback (most recent call last):
+  File "/home/kunwar.zaid/ICON/qwen-baseline.py", line 11, in <module>
+    llm = LLM(
+          ^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 344, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 185, in from_engine_args
+    return cls(
+           ^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 111, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 126, in make_client
+    return SyncMPClient(
+           ^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 917, in __init__
+    super().__init__(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 674, in __init__
+    with launch_core_engines(
+  File "/usr/lib/python3.12/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1268, in launch_core_engines
+    wait_for_engine_startup(
+  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1348, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
