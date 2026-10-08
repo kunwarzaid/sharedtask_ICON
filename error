@@ -1,260 +1,370 @@
-(EngineCore pid=15220) INFO 10-07 08:27:39 [parallel_state.py:1825] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_1b5aa4401a5846218e08dc9e1694269a backend=nccl
-(EngineCore pid=15220) INFO 10-07 08:27:43 [parallel_state.py:2269] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, ETP rank 0, EP rank N/A, EPLB rank N/A
-(EngineCore pid=15220) INFO 10-07 08:27:43 [gpu_worker.py:479] Using V2 Model Runner
-(EngineCore pid=15220) INFO 10-07 08:27:43 [model_runner.py:375] Loading model from scratch...
-(EngineCore pid=15220) INFO 10-07 08:27:44 [cuda.py:526] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
-(EngineCore pid=15220) INFO 10-07 08:27:44 [flash_attn.py:1167] Using FlashAttention version 3
-(EngineCore pid=15220) INFO 10-07 08:27:46 [weight_utils.py:1063] Filesystem type for checkpoints: EXT4. Checkpoint size: 15.26 GiB. Available RAM: 306.22 GiB.
-(EngineCore pid=15220) INFO 10-07 08:27:46 [weight_utils.py:1086] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
-Loading safetensors checkpoint shards: 100% Completed | 5/5 [00:00<00:00,  
-(EngineCore pid=15220) INFO 10-07 08:27:47 [default_loader.py:484] Loading weights took 1.00 seconds
-(EngineCore pid=15220) INFO 10-07 08:27:47 [model_runner.py:407] Model loading took 15.27 GiB memory and 4.192716 seconds
-(EngineCore pid=15220) INFO 10-07 08:27:47 [topk_topp_sampler.py:124] Using FlashInfer for top-p & top-k sampling.
-(EngineCore pid=15220) INFO 10-07 08:27:47 [torch_utils.py:286] Reducing Torch threads from 40 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
-(EngineCore pid=15220) INFO 10-07 08:27:47 [utils.py:343] Using LBNHC KV cache layout.
-(EngineCore pid=15220) INFO 10-07 08:27:54 [backends.py:1090] Using cache directory: /home/kunwar.zaid/.cache/vllm/torch_compile_cache/2293804d6d/rank_0_0/backbone for vLLM's torch.compile
-(EngineCore pid=15220) INFO 10-07 08:27:54 [backends.py:1151] Dynamo bytecode transform time: 6.25 s
-(EngineCore pid=15220) INFO 10-07 08:28:13 [backends.py:391] Compiling a graph for compile range (1, 16384) takes 18.13 s
-(EngineCore pid=15220) INFO 10-07 08:28:17 [backends.py:916] collected artifacts: 37 entries, 3 artifacts, 6140319 bytes total
-(EngineCore pid=15220) INFO 10-07 08:28:17 [decorators.py:717] saved AOT compiled function to /home/kunwar.zaid/.cache/vllm/torch_compile_cache/torch_aot_compile/33143a85731f3244abec6124eb49b6de1a8e1deb76d5b99fcf48f56f30591f15/rank_0_0/model
-(EngineCore pid=15220) INFO 10-07 08:28:17 [monitor.py:53] torch.compile took 28.53 s in total
-(EngineCore pid=15220) INFO 10-07 08:28:17 [monitor.py:81] Initial profiling/warmup run took 0.07 s
-Capturing CUDA graphs (PIECEWISE): 100%|███| 51/51 [00:02<00:00, 18.49it/s]
-Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 31.73it/s]
-(EngineCore pid=15220) INFO 10-07 08:28:22 [model_runner.py:1087] Graph capturing finished in 4 secs, took 0.62 GiB
-(EngineCore pid=15220) INFO 10-07 08:28:23 [gpu_worker.py:692] Available KV cache memory: 65.18 GiB
-(EngineCore pid=15220) INFO 10-07 08:28:23 [gpu_worker.py:707] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.9000 is equivalent to --gpu-memory-utilization=0.8900 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.9100. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
-(EngineCore pid=15220) INFO 10-07 08:28:23 [kv_cache_utils.py:2464] GPU KV cache size: 474,592 tokens, Maximum concurrency for 40,960 tokens per request: 11.59x
-(EngineCore pid=15220) INFO 10-07 08:28:23 [kernel_warmup.py:172] JIT kernel warmup starting.
-(EngineCore pid=15220) INFO 10-07 08:28:23 [kernel_warmup.py:185] JIT kernel warmup finished in 0.00s.
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] EngineCore failed to start.
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] Traceback (most recent call last):
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     super().__init__(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 151, in __init__
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     kv_cache_config = self._initialize_kv_caches(vllm_config)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 357, in _initialize_kv_caches
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.model_executor.compile_or_warm_up_model()
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 128, in compile_or_warm_up_model
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     compilation_times: list[CompilationTimes] = self.collective_rpc(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                                 ^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     result = run_method(self.driver_worker, method, args, kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 508, in run_method
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 876, in compile_or_warm_up_model
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     warmup_kernels(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 235, in warmup_kernels
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     _warmup_kernels(model_runner, worker_execute_model, worker_sample_tokens)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 373, in _warmup_kernels
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     worker_sample_tokens(grammar_output)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 1217, in sample_tokens
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return self.model_runner.sample_tokens(grammar_output)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return func(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/eplb_utils.py", line 27, in wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     result = fn(self, *args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2096, in sample_tokens
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampler_output, num_sampled, num_rejected = self.sample(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                                 ^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 1600, in sample
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampler_output = self.sampler(logits, input_batch)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 154, in __call__
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampled, processed_logits = self.sample(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                                 ^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 314, in sample
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return self._sample_random(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 336, in _sample_random
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     sampled = flashinfer_sample(processed_logits, top_k, top_p).to(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/sample/ops/topk_topp_sampler.py", line 602, in flashinfer_sample
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     next_token_ids = flashinfer.sampling.top_k_top_p_sampling_from_logits(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return _inner(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1547, in top_k_top_p_sampling_from_logits
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     masked_logits = top_k_mask_logits(logits, top_k)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return _inner(*args, **kwargs)
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1974, in top_k_mask_logits
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     return get_sampling_module().top_k_mask_logits(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]            ^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 68, in get_sampling_module
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     module = gen_sampling_module().build_and_load()
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 335, in build_and_load
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.build()
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 562, in build
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     self.write_ninja()
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 490, in write_ninja
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     content = generate_ninja_build_for_op(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 250, in generate_ninja_build_for_op
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     cuda_home = get_cuda_path()
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]                 ^^^^^^^^^^^^^^^
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]   File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 61, in get_cuda_path
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433]     raise RuntimeError(
-(EngineCore pid=15220) ERROR 10-07 08:28:25 [core.py:1433] RuntimeError: Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist
-Process EngineCore:
-Traceback (most recent call last):
-  File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1437, in run_engine_core
-    raise e
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1395, in run_engine_core
-    engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1151, in __init__
-    super().__init__(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 151, in __init__
-    kv_cache_config = self._initialize_kv_caches(vllm_config)
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 357, in _initialize_kv_caches
-    self.model_executor.compile_or_warm_up_model()
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 128, in compile_or_warm_up_model
-    compilation_times: list[CompilationTimes] = self.collective_rpc(
-                                                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
-    result = run_method(self.driver_worker, method, args, kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 508, in run_method
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 876, in compile_or_warm_up_model
-    warmup_kernels(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 235, in warmup_kernels
-    _warmup_kernels(model_runner, worker_execute_model, worker_sample_tokens)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/warmup.py", line 373, in _warmup_kernels
-            worker_sample_tokens(grammar_output)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 1217, in sample_tokens
-    return self.model_runner.sample_tokens(grammar_output)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/eplb_utils.py", line 27, in wrapper
-    result = fn(self, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 2096, in sample_tokens
-    sampler_output, num_sampled, num_rejected = self.sample(
-                                                ^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 1600, in sample
-    sampler_output = self.sampler(logits, input_batch)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 154, in __call__
-    sampled, processed_logits = self.sample(
-                                ^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 314, in sample
-    return self._sample_random(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/worker/gpu/sample/sampler.py", line 336, in _sample_random
-    sampled = flashinfer_sample(processed_logits, top_k, top_p).to(
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/sample/ops/topk_topp_sampler.py", line 602, in flashinfer_sample
-    next_token_ids = flashinfer.sampling.top_k_top_p_sampling_from_logits(
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
-    return _inner(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1547, in top_k_top_p_sampling_from_logits
-    masked_logits = top_k_mask_logits(logits, top_k)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2348, in _auto_dump_wrapper
-    return _inner(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 1974, in top_k_mask_logits
-    return get_sampling_module().top_k_mask_logits(
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/sampling.py", line 68, in get_sampling_module
-    module = gen_sampling_module().build_and_load()
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 335, in build_and_load
-    self.build()
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 562, in build
-    self.write_ninja()
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/core.py", line 490, in write_ninja
-    content = generate_ninja_build_for_op(
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 250, in generate_ninja_build_for_op
-    cuda_home = get_cuda_path()
-                ^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/flashinfer/jit/cpp_ext.py", line 61, in get_cuda_path
-    raise RuntimeError(
-RuntimeError: Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist
-(MainProcess pid=15072) INFO 10-07 08:28:25 [utils.py:638] [shutdown] Process manager: send sigterm to process EngineCore
-Traceback (most recent call last):
-  File "/home/kunwar.zaid/ICON/qwen-baseline.py", line 11, in <module>
-    llm = LLM(
-          ^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 344, in __init__
-    self.llm_engine = LLMEngine.from_engine_args(
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 185, in from_engine_args
-    return cls(
-           ^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 111, in __init__
-    self.engine_core = EngineCoreClient.make_client(
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 126, in make_client
-    return SyncMPClient(
-           ^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 175, in sync_wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 917, in __init__
-    super().__init__(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 674, in __init__
-    with launch_core_engines(
-  File "/usr/lib/python3.12/contextlib.py", line 144, in __exit__
-    next(self.gen)
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1268, in launch_core_engines
-    wait_for_engine_startup(
-  File "/home/kunwar.zaid/ICON/.venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1348, in wait_for_engine_startup
-    raise RuntimeError(
-RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Yes. Looking at your code, I would make a few changes before starting the fine-tuning run. Your vLLM inference issue is separate; this training script has a couple of things that are more important to fix.
+
+1. Most important: don’t train on the entire conversation
+
+You currently have:
+
+tokens["labels"] = tokens["input_ids"].copy()
+
+This means the loss is calculated on every token, including the user/instruction part.
+
+For a chat/safety dataset, you generally want:
+
+Input: conversation/question
+Target: assistant’s safety response
+
+rather than teaching the model to reproduce the entire conversation.
+
+If your JSON looks like:
+
+{
+  "messages": [
+    {"role": "user", "content": "..."},
+    {"role": "assistant", "content": "..."}
+  ]
+}
+
+I recommend masking the user/system tokens with -100 and calculating loss only on assistant tokens.
+
+This is more important than the CUDA issue you just solved.
+
+⸻
+
+2. Your current training is full fine-tuning
+
+You have:
+
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    torch_dtype="auto",
+    device_map="auto",
+    trust_remote_code=True
+)
+
+There is no LoRA/PEFT here.
+
+So you’re doing full fine-tuning of Qwen3-8B.
+
+If you’re on an A100 80GB, this may work, but it is considerably more memory-hungry than LoRA.
+
+Your current:
+
+per_device_train_batch_size=4
+gradient_accumulation_steps=8
+
+gives an effective batch size of:
+
+4 × 8 = 32
+
+That’s reasonable, but batch size 4 at sequence length 1024 during full 8B training can still be tight depending on your exact GPU and Transformers/PyTorch configuration.
+
+I would add:
+
+gradient_checkpointing=True,
+bf16=True,
+
+and preferably:
+
+gradient_checkpointing_kwargs={"use_reentrant": False},
+
+This substantially reduces activation memory.
+
+⸻
+
+3. Don’t use device_map="auto" for training
+
+For training, I’d change:
+
+device_map="auto"
+
+to simply:
+
+device_map=None
+
+or omit it.
+
+device_map="auto" is primarily useful for inference/model placement and can cause undesirable behavior with training/Trainer.
+
+For a single A100, let Trainer/PyTorch place the model on the GPU.
+
+So:
+
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    torch_dtype=torch.bfloat16,
+    trust_remote_code=True
+)
+
+⸻
+
+4. Use BF16 explicitly
+
+Instead of:
+
+torch_dtype="auto"
+
+I’d use:
+
+torch_dtype=torch.bfloat16
+
+and:
+
+bf16=True,
+fp16=False,
+
+assuming your A100 supports BF16 — it does.
+
+This gives you a more predictable training configuration.
+
+⸻
+
+5. Your learning rate is reasonable
+
+You currently have:
+
+learning_rate=2e-4
+
+For full fine-tuning of an 8B model, however, I would be more conservative.
+
+I’d start with:
+
+learning_rate=1e-5
+
+or:
+
+learning_rate=2e-5
+
+2e-4 is much more aggressive for full-model fine-tuning.
+
+If this were LoRA, 2e-4 would be much more normal.
+
+For your current full fine-tuning:
+
+I’d use 2e-5.
+
+⸻
+
+6. Add warmup
+
+I don’t see a warmup setting in your screenshot.
+
+Add:
+
+warmup_ratio=0.05,
+
+This means the learning rate gradually ramps up during the first 5% of training.
+
+For safety-oriented fine-tuning, this is a good precaution against large early updates.
+
+⸻
+
+7. Your 3 epochs are okay
+
+You have:
+
+num_train_epochs=3
+
+That’s reasonable.
+
+But because you’re fine-tuning an 8B model for a safety dataset, I would watch validation loss carefully.
+
+You already have:
+
+eval_dataset=dataset["validation"]
+
+which is good.
+
+I’d also enable:
+
+load_best_model_at_end=True,
+metric_for_best_model="eval_loss",
+greater_is_better=False,
+
+Then the final model will be the checkpoint with the lowest validation loss, rather than simply the model from the end of epoch 3.
+
+⸻
+
+8. Change your saving/evaluation strategy slightly
+
+You currently have:
+
+evaluation_strategy="steps",
+eval_steps=100,
+save_steps=100,
+save_total_limit=2,
+
+That’s fine.
+
+I’d add:
+
+load_best_model_at_end=True,
+metric_for_best_model="eval_loss",
+greater_is_better=False,
+
+And make sure save_steps and eval_steps are the same — yours already are.
+
+⸻
+
+9. Add logging
+
+You already have:
+
+logging_steps=20
+
+Good.
+
+I’d also add:
+
+logging_first_step=True,
+
+so you immediately know training has started correctly.
+
+⸻
+
+10. VERY important: test the dataset before launching 3 epochs
+
+Before you commit to a long training run, run:
+
+print(dataset)
+print(dataset["train"][0])
+print(dataset["validation"][0])
+
+And inspect the tokenized example:
+
+example = tokenize(dataset["train"][0])
+print("Input length:", len(example["input_ids"]))
+print("Labels:", example["labels"][:50])
+
+The biggest thing we want to verify is that your labels are constructed correctly.
+
+⸻
+
+Recommended TrainingArguments
+
+For your current setup, I’d change your block to approximately:
+
+args = TrainingArguments(
+    output_dir="outputs/safety_understanding",
+    per_device_train_batch_size=4,
+    per_device_eval_batch_size=4,
+    gradient_accumulation_steps=8,
+    learning_rate=2e-5,
+    num_train_epochs=3,
+    bf16=True,
+    fp16=False,
+    gradient_checkpointing=True,
+    gradient_checkpointing_kwargs={"use_reentrant": False},
+    warmup_ratio=0.05,
+    logging_steps=20,
+    logging_first_step=True,
+    eval_strategy="steps",
+    eval_steps=100,
+    save_strategy="steps",
+    save_steps=100,
+    save_total_limit=2,
+    load_best_model_at_end=True,
+    metric_for_best_model="eval_loss",
+    greater_is_better=False,
+    report_to="none",
+)
+
+Depending on your installed Transformers version, evaluation_strategy may still be accepted, but newer versions use eval_strategy.
+
+⸻
+
+11. One more important issue: max_length=1024
+
+You currently have:
+
+max_length=1024
+
+This is okay if your safety conversations fit within 1024 tokens.
+
+But because you’re doing:
+
+truncation=True
+
+anything beyond 1024 gets silently truncated.
+
+Before training, calculate how many examples exceed 1024.
+
+For example:
+
+lengths = []
+for example in dataset["train"]:
+    text = tokenizer.apply_chat_template(
+        example["messages"],
+        tokenize=False,
+        add_generation_prompt=False,
+    )
+    lengths.append(len(tokenizer(text)["input_ids"]))
+print("Max:", max(lengths))
+print("Average:", sum(lengths)/len(lengths))
+print("Over 1024:", sum(x > 1024 for x in lengths))
+
+If only a small number exceed 1024, you’re fine.
+
+If a large percentage exceed 1024, I’d consider 2048.
+
+⸻
+
+12. Don’t worry about the previous FlashInfer problem for training
+
+The error you had earlier:
+
+Could not find nvcc
+
+was from vLLM inference, specifically FlashInfer’s sampling JIT.
+
+Your fine-tuning script uses:
+
+Trainer
+AutoModelForCausalLM
+
+and is not using vLLM.
+
+So you don’t need to install CUDA Toolkit just because of that previous error.
+
+If you disabled FlashInfer using:
+
+export VLLM_USE_FLASHINFER_SAMPLER=0
+
+that’s fine for your vLLM inference run. It doesn’t affect this Trainer run.
+
+⸻
+
+My biggest concern with your current code
+
+It’s actually this:
+
+tokens["labels"] = tokens["input_ids"].copy()
+
+I’d fix this before starting the actual training.
+
+Because otherwise the model is being optimized to reproduce:
+
+system message
++
+user message
++
+assistant response
+
+instead of primarily learning:
+
+assistant response
+
+For your safety-understanding experiment, that can materially affect the quality of the fine-tuning.
+
+So I would do this order:
+
+1. Fix label masking ⭐
+2. Remove device_map="auto"
+3. Use BF16
+4. Enable gradient checkpointing
+5. Reduce LR from 2e-4 → 2e-5
+6. Add 5% warmup
+7. Enable load_best_model_at_end
+8. Verify how many examples are truncated at 1024
+9. Run a short sanity test before the full 3 epochs
+
+If you want, send me the complete train_safety_model.py file (or paste the remaining code), and I can rewrite the entire script for Qwen3-8B + your JSONL chat format + correct assistant-only loss masking, so you can run it directly without making these changes manually.
