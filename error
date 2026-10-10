@@ -1,3 +1,19 @@
+Evaluating: 100%|██████████████████████████████████████████████████████████████| 1176/1176 [50:50<00:00,  2.59s/it]
+
+============================================================
+CATEGORY
+============================================================
+No valid JSON predictions to evaluate.
+
+============================================================
+PERSUASION
+============================================================
+No valid JSON predictions to evaluate.
+
+Total examples: 1176
+Failed JSON parses: 1176
+Successful JSON parses: 0
+
 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
 Loading weights: 100%|████████████████████████████████████████| 399/399 [00:01<00:00, 388.94it/s]
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
