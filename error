@@ -1,5 +1,40 @@
 import json
+import re
 import torch
+
+from transformers import (
+    AutoTokenizer,
+    AutoModelForCausalLM,
+)
+
+from peft import PeftModel
+
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+BASE_MODEL = "Qwen/Qwen3-8B"
+
+ADAPTER_PATH = (
+    "./outputs/safety_understanding/"
+    "best_adapter"
+)
+
+VALID_FILE = (
+    "training_data/"
+    "safety_understanding_valid.jsonl"
+)
+
+# Test only a few examples.
+NUM_EXAMPLES = 10
+
+MAX_NEW_TOKENS = 64
+
+
+# ============================================================
+# EXACT SYSTEM PROMPT USED DURING TRAINING
+# ============================================================
 
 TRAIN_SYSTEM_PROMPT = """You are a multilingual safety analysis system.
 
@@ -17,82 +52,633 @@ Schema:
   "persuasion": "..."
 }"""
 
-# first validation example
-example = dataset[0]
 
-messages = example["messages"]
+# ============================================================
+# JSON PARSER
+# ============================================================
 
-gold = json.loads(
-    messages[2]["content"]
-)
+def extract_json(text):
 
-# Replace ONLY the system prompt.
-# Keep validation user prompt unchanged.
-eval_messages = [
-    {
-        "role": "system",
-        "content": TRAIN_SYSTEM_PROMPT,
-    },
-    {
-        "role": "user",
-        "content": messages[1]["content"],
-    },
-]
+    text = str(text).strip()
 
-text = tokenizer.apply_chat_template(
-    eval_messages,
-    tokenize=False,
-    add_generation_prompt=True,
-    enable_thinking=False,
-)
+    # Remove think block if model generates one.
+    text = re.sub(
+        r"<think>.*?</think>",
+        "",
+        text,
+        flags=re.DOTALL | re.IGNORECASE,
+    ).strip()
 
-inputs = tokenizer(
-    text,
-    return_tensors="pt",
-)
+    # First try direct parsing.
+    try:
+        obj = json.loads(text)
 
-device = next(model.parameters()).device
+        if isinstance(obj, dict):
+            return obj
 
-inputs = {
-    k: (
-        v.to(device)
-        if torch.is_tensor(v)
-        else v
-    )
-    for k, v in inputs.items()
-}
+    except json.JSONDecodeError:
+        pass
 
-with torch.inference_mode():
-
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=64,
-        do_sample=False,
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.eos_token_id,
-        use_cache=True,
+    # Fallback: locate first simple JSON object.
+    match = re.search(
+        r"\{[^{}]*\}",
+        text,
+        flags=re.DOTALL,
     )
 
-prompt_len = inputs["input_ids"].shape[1]
+    if match:
 
-generated = outputs[0][prompt_len:]
+        try:
+            obj = json.loads(
+                match.group(0)
+            )
 
-decoded = tokenizer.decode(
-    generated,
-    skip_special_tokens=True,
-).strip()
+            if isinstance(obj, dict):
+                return obj
+
+        except json.JSONDecodeError:
+            pass
+
+    return None
+
+
+# ============================================================
+# LOAD VALIDATION DATA
+# ============================================================
 
 print("=" * 70)
-print("VALIDATION USER")
+print("LOADING VALIDATION DATA")
 print("=" * 70)
-print(messages[1]["content"])
 
-print("\n" + "=" * 70)
-print("GOLD")
-print("=" * 70)
-print(gold)
+with open(
+    VALID_FILE,
+    "r",
+    encoding="utf-8",
+) as f:
 
-print("\n" + "=" * 70)
-print("MODEL OUTPUT")
-print("=" * 70)
-print(repr(decoded))
+    dataset = [
+        json.loads(line)
+        for line in f
+        if line.strip()
+    ]
+
+
+print(
+    "Validation examples:",
+    len(dataset)
+)
+
+if len(dataset) == 0:
+    raise RuntimeError(
+        "Validation dataset is empty."
+    )
+
+
+# ============================================================
+# LOAD TOKENIZER
+# ============================================================
+
+print("\nLoading tokenizer...")
+
+tokenizer = AutoTokenizer.from_pretrained(
+    BASE_MODEL,
+    trust_remote_code=True,
+)
+
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+
+
+# ============================================================
+# LOAD BASE MODEL
+# ============================================================
+
+print("Loading base model...")
+
+base_model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL,
+    dtype=torch.bfloat16,
+    device_map="auto",
+    trust_remote_code=True,
+)
+
+
+# ============================================================
+# LOAD LORA
+# ============================================================
+
+print("Loading LoRA adapter...")
+
+model = PeftModel.from_pretrained(
+    base_model,
+    ADAPTER_PATH,
+)
+
+model.eval()
+
+print(
+    "Active adapter:",
+    model.active_adapter
+)
+
+
+# ============================================================
+# FIND DEVICE
+# ============================================================
+
+device = next(
+    model.parameters()
+).device
+
+print(
+    "Input device:",
+    device
+)
+
+
+# ============================================================
+# GENERATION FUNCTION
+# ============================================================
+
+def generate(messages):
+
+    # IMPORTANT:
+    # This exactly matches the working diagnostic.
+    #
+    # It inserts:
+    #
+    # <|im_start|>assistant
+    # <think>
+    #
+    # </think>
+    #
+    # and generation starts immediately after that.
+
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=False,
+    )
+
+    inputs = tokenizer(
+        text,
+        return_tensors="pt",
+    )
+
+    # Move tensor values only.
+    inputs = {
+        key: (
+            value.to(device)
+            if torch.is_tensor(value)
+            else value
+        )
+        for key, value in inputs.items()
+    }
+
+    with torch.inference_mode():
+
+        output = model.generate(
+            **inputs,
+            max_new_token**MAX_NEW_TOKENS,
+            do_sa**le=False,
+            eos_token_i**tokenizer.eos_token_id,
+         ** pad_token_id=tokenizer.eos_token**d,
+            use_cache=True,
+  **    )
+
+    prompt_length = (
+    **  inputs["input_ids"].shape[1]
+  **)
+
+    generated_tokens = output[0][
+        prompt_length:
+    ]
+
+ ** decoded = tokenizer.decode(
+    **  generated_tokens,
+        skip_**ecial_tokens=True,
+    ).strip()
+**   return (
+        decoded,
+    **  extract_json(decoded),
+        **xt,
+    )
+
+
+# ===================**=================================**====
+# DIAGNOSTIC COUNTERS
+# ====**=================================**===================
+
+stored_promp**json_success = 0
+training_prompt_**on_success = 0
+
+stored_prompt_joi**_correct = 0
+training_prompt_join**correct = 0
+
+
+# =================**=================================**======
+# RUN FIRST N EXAMPLES
+# =**=================================**======================
+
+num_to_te** = min(
+    NUM_EXAMPLES,
+    len**ataset),
+)
+
+
+for index in range(n**_to_test):
+
+    example = dataset**ndex]
+
+    messages = example["messages"]
+
+    if len(messages) < 3:**       raise RuntimeError(
+      **    f"Example {index} has fewer t**n 3 messages."
+        )
+
+    val**ation_system_prompt = (
+        m**sages[0]["content"]
+    )
+
+    us**_prompt = (
+        messages[1]["content"]
+    )
+
+    gold = json.lo**s(
+        messages[2]["content"]**   )
+
+
+    # ====================**=================================**    # EXPERIMENT A
+    #
+    # Us**system prompt stored in validatio**dataset.
+    # ==================**=================================**=
+
+    validation_messages = [
+        {
+            "role": "system",
+            "content":
+                validation_system_prompt,
+        },
+        {
+            "role": "user",
+            "content":
+                user_prompt,
+        },
+    ]
+
+    (
+        output_a,**       parsed_a,
+        template**,
+    ) = generate(
+        valid**ion_messages
+    )
+
+
+    # ======**=================================**=============
+    # EXPERIMENT B
+**  #
+    # Replace ONLY system pro**t with exact training prompt.
+   ** User prompt remains identical.
+ ** # ==============================**========================
+
+    tra**ing_prompt_messages = [
+        {
+            "role": "system",
+            "content":
+                TRAIN_SYSTEM_PROMPT,
+        },
+        {
+            "role": "user",
+            "content":
+                user_prompt,
+        },
+    ]
+
+**  (
+        output_b,
+        par**d_b,
+        template_b,
+    ) = **nerate(
+        training_prompt_m**sages
+    )
+
+
+    # =============**=================================**======
+    # SCORING
+    # ======**=================================**=============
+
+    if parsed_a is**ot None:
+
+        stored_prompt_j**n_success += 1
+
+        if (
+    **      parsed_a.get("category")
+  **        == gold.get("category")
+ **         and
+            parsed_a**et("persuasion")
+            == g**d.get("persuasion")
+        ):
+
+ **         stored_prompt_joint_corr**t += 1
+
+
+    if parsed_b is not N**e:
+
+        training_prompt_json_**ccess += 1
+
+        if (
+        **  parsed_b.get("category")
+      **    == gold.get("category")
+     **     and
+            parsed_b.get**persuasion")
+            == gold.**t("persuasion")
+        ):
+
+     **     training_prompt_joint_correc**+= 1
+
+
+    # ====================**=================================**    # PRINT RESULT
+    # ========**=================================**===========
+
+    print(
+        "**\n"
+        + "=" * 78
+    )
+
+   **rint(
+        f"EXAMPLE {index}"
+**  )
+
+    print(
+        "=" * 78
+**  )
+
+    print(
+        "\nUSER P**MPT:"
+    )
+
+    print(
+        u**r_prompt
+    )
+
+    print(
+      **"\nGOLD:"
+    )
+
+    print(
+     ** gold
+    )
+
+
+    print(
+        **n"
+        + "-" * 78
+    )
+
+    **int(
+        "A. VALIDATION SYSTE**PROMPT"
+    )
+
+    print(
+       **-" * 78
+    )
+
+    print(
+       **System prompt:"
+    )
+
+    print(**       validation_system_prompt
+ ** )
+
+    print(
+        "\nRaw output:"
+    )
+
+    print(
+        repr(output_a)
+    )
+
+    print(
+        "\nParsed:"
+    )
+
+    print(
+        parsed_a
+    )
+
+
+    print(
+        "\n"
+        + "-" * 78
+    )
+
+    print(
+        "B. TRAINING SYSTEM PROMPT"
+    )
+
+    print(
+        "-" * 78
+    )
+
+    print(
+        "System prompt:"
+    )
+
+    print(
+        TRAIN_SYSTEM_PROMPT
+    )
+
+    print(
+        "\nRaw output:"
+    )
+
+    print(
+        repr(output_b)
+    )
+
+    print(
+        "\nParsed:"
+    )
+
+    print(
+        parsed_b
+    )
+
+
+    # ========================================================
+    # PRINT TEMPLATE ONLY FOR FIRST EXAMPLE
+    # ========================================================
+
+    if index == 0:
+
+        print(
+            "\n"
+            + "-" * 78
+        )
+
+        print(
+            "SERIALIZED TEMPLATE A"
+        )
+
+        print(
+            "-" * 78
+        )
+
+        print(
+            repr(template_a)
+        )
+
+        print(
+            "\n"
+            + "-" * 78
+        )
+
+        print(
+            "SERIALIZED TEMPLATE B"
+        )
+
+        print(
+            "-" * 78
+        )
+
+        print(
+            repr(template_b)
+        )
+
+
+# ============================================================
+# SUMMARY
+# ============================================================
+
+print(
+    "\n\n"
+    + "=" * 78
+)
+
+print(
+    "DIAGNOSTIC SUMMARY"
+)
+
+print(
+    "=" * 78
+)
+
+print(
+    "\nExamples tested:",
+    num_to_test
+)
+
+
+print(
+    "\nA. VALIDATION SYSTEM PROMPT"
+)
+
+print(
+    "JSON success:",
+    f"{stored_prompt_json_success}/"
+    f"{num_to_test}"
+)
+
+print(
+    "Joint correct:",
+    f"{stored_prompt_joint_correct}/"
+    f"{num_to_test}"
+)
+
+
+print(
+    "\nB. TRAINING SYSTEM PROMPT"
+)
+
+print(
+    "JSON success:",
+    f"{training_prompt_json_success}/"
+    f"{num_to_test}"
+)
+
+print(
+    "Joint correct:",
+    f"{training_prompt_joint_correct}/"
+    f"{num_to_test}"
+)
+
+
+# ============================================================
+# INTERPRETATION
+# ============================================================
+
+print(
+    "\n"
+    + "=" * 78
+)
+
+print(
+    "INTERPRETATION"
+)
+
+print(
+    "=" * 78
+)
+
+
+if (
+    stored_prompt_json_success == 0
+    and
+    training_prompt_json_success > 0
+):
+
+    print(
+        """
+The adapter works when given the exact training system prompt,
+but fails with the validation system prompt.
+
+This strongly indicates SYSTEM-PROMPT SENSITIVITY.
+Do not retrain yet. Evaluate the current model using the exact
+training instruction to quantify what it learned.
+"""
+    )
+
+
+elif (
+    stored_prompt_json_success > 0
+    and
+    training_prompt_json_success > 0
+):
+
+    print(
+        """
+Both prompt variants produce JSON.
+
+The previous 0/1176 failure likely came from the earlier
+evaluation path rather than from the trained adapter.
+"""
+    )
+
+
+elif (
+    stored_prompt_json_success == 0
+    and
+    training_prompt_json_success == 0
+):
+
+    print(
+        """
+Neither prompt variant produced valid JSON.
+
+Since the adapter already produced perfect JSON on an exact
+training example, investigate whether this validation data
+differs materially from the training distribution.
+"""
+    )
+
+
+else:
+
+    print(
+        """
+Unexpected pattern: the validation prompt works better than
+the exact training prompt. Inspect the printed serialized
+templates and raw generations.
+"""
+    )
