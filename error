@@ -1,4 +1,28 @@
-File "/home/kunwar.zaid/ICON/diagnosis.py", line 146
-    max_ne**tokens=64,
-    ^^^^^^^^^^^^^^^
-SyntaxError: expression cannot contain assignment, perhaps you meant "=="?
+with torch.inference_mode():
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.eos_token_id,
+        use_cache=True,
+    )
+
+prompt_length = inputs["input_ids"].shape[1]
+
+generated_tokens = outputs[0][prompt_length:]
+
+prediction = tokenizer.decode(
+    generated_tokens,
+    skip_special_tokens=True,
+).strip()
+
+print("\n" + "=" * 70)
+print("LORA OUTPUT")
+print("=" * 70)
+print(repr(prediction))
+
+print("\n" + "=" * 70)
+print("GOLD")
+print("=" * 70)
+print(repr(messages[2]["content"]))
