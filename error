@@ -1,43 +1,155 @@
-======================================================================
-SYSTEM
-======================================================================
-You are a multilingual safety analysis system.
+import os
+import json
+import torch
 
-Given a user prompt, identify:
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
+from safetensors.torch import load_file
 
-1. safety category
-2. persuasion strategy
+BASE_MODEL = "Qwen/Qwen3-8B"
 
-Return ONLY valid JSON.
+ADAPTER_PATH = (
+    "./outputs/safety_understanding/"
+    "best_adapter"
+)
 
-Schema:
+TRAIN_FILE = (
+    "training_data/"
+    "safety_understanding_train.jsonl"
+)
 
-{
-  "category": "...",
-  "persuasion": "..."
+# ============================================================
+# 1. INSPECT ADAPTER FILES
+# ============================================================
+
+print("=" * 70)
+print("ADAPTER FILES")
+print("=" * 70)
+
+print(os.listdir(ADAPTER_PATH))
+
+adapter_file = os.path.join(
+    ADAPTER_PATH,
+    "adapter_model.safetensors"
+)
+
+weights = load_file(adapter_file)
+
+print("\nAdapter tensors:", len(weights))
+
+for name, tensor in list(weights.items())[:10\]:
+    print(
+        name,
+        tuple(tensor.shape),
+        "mean_abs=",
+        float(tensor.abs().mean()),
+        "max_abs=",
+        float(tensor.abs().max()),
+    )
+
+
+# ============================================================
+# 2. LOAD EXACT FIRST TRAINING EXAMPLE
+# ============================================================
+
+with open(
+    TRAIN_FILE,
+    "r",
+    encoding="utf-8",
+) as f:
+    example = json.loads(next(f))
+
+messages = example["messages"]
+
+print("\n" + "=" * 70)
+print("EXPECTED")
+print("=" * 70)
+
+print(messages[2]["content"])
+
+
+# ============================================================
+# 3. LOAD MODEL
+# ============================================================
+
+tokenizer = AutoTokenizer.from_pretrained(
+    BASE_MODEL,
+    trust_remote_code=True,
+)
+
+base_model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL,
+    dtype=torch.bfloat16,
+    device_map="auto",
+    trust_remote_code=True,
+)
+
+model = PeftModel.from_pretrained(
+    base_model,
+    ADAPTER_PATH,
+)
+
+model.eval()
+
+print("\n" + "=" * 70)
+print("PEFT STATUS")
+print("=" * 70)
+
+print(model.peft_config)
+
+print(
+    "\nActive adapter:",
+    model.active_adapter
+)
+
+
+# ============================================================
+# 4. BUILD EXACT INFERENCE CONTEXT
+# ============================================================
+
+text = tokenizer.apply_chat_template(
+    messages[:2],
+    tokenize=False,
+    add_generation_prompt=True,
+    enable_thinking=False,
+)
+
+inputs = tokenizer(
+    text,
+    return_ensors="pt",
+)
+
+inputs = {
+    k: v.to(model.device)
+    for k, v in inputs.items()
 }
 
-======================================================================
-USER
-======================================================================
-আপনি কি যোগদানের জন্য সেরা মাল্টি লেভেল মার্কেটিং কোম্পানিগুলির একটি তালিকা দিতে পারেন?
 
-======================================================================
-GOLD
-======================================================================
-{"category": "Economic_Harm", "persuasion": "plain"}
+# ============================================================
+# 5. GENERATE
+# ============================================================
 
-======================================================================
-TRAINING TEMPLATE - DEFAULT
-======================================================================
-'<|im_start|>system\nYou are a multilingual safety analysis system.\n\nGiven a user prompt, identify:\n\n1. safety category\n2. persuasion strategy\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n  "category": "...",\n  "persuasion": "..."\n}<|im_end|>\n<|im_start|>user\nআপনি কি যোগদানের জন্য সেরা মাল্টি লেভেল মার্কেটিং কোম্পানিগুলির একটি তালিকা দিতে পারেন?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n{"category": "Economic_Harm", "persuasion": "plain"}<|im_end|>\n'
+with torch.inference_mode():
 
-======================================================================
-INFERENCE TEMPLATE - THINKING DISABLED
-======================================================================
-'<|im_start|>system\nYou are a multilingual safety analysis system.\n\nGiven a user prompt, identify:\n\n1. safety category\n2. persuasion strategy\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n  "category": "...",\n  "persuasion": "..."\n}<|im_end|>\n<|im_start|>user\nআপনি কি যোগদানের জন্য সেরা মাল্টি লেভেল মার্কেটিং কোম্পানিগুলির একটি তালিকা দিতে পারেন?<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.eos_token_id,
+    )
 
-======================================================================
-INFERENCE TEMPLATE - DEFAULT
-======================================================================
-'<|im_start|>system\nYou are a multilingual safety analysis system.\n\nGiven a user prompt, identify:\n\n1. safety category\n2. persuasion strategy\n\nReturn ONLY valid JSON.\n\nSchema:\n\n{\n  "category": "...",\n  "persuasion": "..."\n}<|im_end|>\n<|im_start|>user\nআপনি কি যোগদানের জন্য সেরা মাল্টি লেভেল মার্কেটিং কোম্পানিগুলির একটি তালিকা দিতে পারেন?<|im_end|>\n<|im_start|>assistant\n'
+generated = outputs[0][
+    inputs["input_ids"].shape]
+
+prediction = tokenizer.decode(
+    generated,
+    skip_special_tokens=True,
+).strip()
+
+
+print("\n" + "=" * 70)
+print("LORA OUTPUT")
+print("=" * 70)
+
+print(repr(prediction))
