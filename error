@@ -1,13 +1,64 @@
 import json
+from transformers import AutoTokenizer
+
+MODEL_NAME = "Qwen/Qwen3-8B"
+TRAIN_FILE = "training_data/safety_understanding_train.jsonl"
+
+# --------------------------------------------------
+# Load tokenizer
+# --------------------------------------------------
+
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_NAME,
+    trust_remote_code=True,
+)
+
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+
+
+# --------------------------------------------------
+# Read first training example
+# --------------------------------------------------
 
 with open(
-    "training_data/safety_understanding_train.jsonl",
+    TRAIN_FILE,
     "r",
-    encoding="utf-8"
+    encoding="utf-8",
 ) as f:
     example = json.loads(next(f))
 
 messages = example["messages"]
+
+
+# --------------------------------------------------
+# Show original conversation
+# --------------------------------------------------
+
+print("=" * 70)
+print("SYSTEM")
+print("=" * 70)
+print(messages[0]["content"])
+
+print("\n" + "=" * 70)
+print("USER")
+print("=" * 70)
+print(messages[1]["content"])
+
+print("\n" + "=" * 70)
+print("GOLD")
+print("=" * 70)
+print(messages[2]["content"])
+
+
+# --------------------------------------------------
+# Training representation
+#
+# IMPORTANT:
+# No enable_thinking=False here.
+# We want to inspect the DEFAULT template because that
+# is closest to what your original SFTTrainer used.
+# --------------------------------------------------
 
 training_text = tokenizer.apply_chat_template(
     messages,
@@ -15,19 +66,40 @@ training_text = tokenizer.apply_chat_template(
     add_generation_prompt=False,
 )
 
-inference_text = tokenizer.apply_chat_template(
+print("\n" + "=" * 70)
+print("TRAINING TEMPLATE - DEFAULT")
+print("=" * 70)
+print(repr(training_text))
+
+
+# --------------------------------------------------
+# Inference representation with thinking disabled
+# --------------------------------------------------
+
+inference_no_thinking = tokenizer.apply_chat_template(
     messages[:2],
     tokenize=False,
     add_generation_prompt=True,
     enable_thinking=False,
 )
 
+print("\n" + "=" * 70)
+print("INFERENCE TEMPLATE - THINKING DISABLED")
 print("=" * 70)
-print("TRAINING TEMPLATE")
-print("=" * 70)
-print(repr(training_text))
+print(repr(inference_no_thinking))
+
+
+# --------------------------------------------------
+# Also inspect inference with DEFAULT Qwen behavior
+# --------------------------------------------------
+
+inference_default = tokenizer.apply_chat_template(
+    messages[:2],
+    tokenize=False,
+    add_generation_prompt=True,
+)
 
 print("\n" + "=" * 70)
-print("INFERENCE TEMPLATE")
+print("INFERENCE TEMPLATE - DEFAULT")
 print("=" * 70)
-print(repr(inference_text))
+print(repr(inference_default))
