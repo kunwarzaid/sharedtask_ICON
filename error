@@ -1,23 +1,31 @@
-# Training-side representation
+import json
+
+with open(
+    "training_data/safety_understanding_train.jsonl",
+    "r",
+    encoding="utf-8"
+) as f:
+    example = json.loads(next(f))
+
+messages = example["messages"]
+
 training_text = tokenizer.apply_chat_template(
     messages,
     tokenize=False,
     add_generation_prompt=False,
 )
 
-print("\n" + "=" * 70)
-print("TRAINING TEMPLATE")
-print("=" * 70)
-print(repr(training_text))
-
-
-# Inference-side representation
 inference_text = tokenizer.apply_chat_template(
     messages[:2],
     tokenize=False,
     add_generation_prompt=True,
     enable_thinking=False,
 )
+
+print("=" * 70)
+print("TRAINING TEMPLATE")
+print("=" * 70)
+print(repr(training_text))
 
 print("\n" + "=" * 70)
 print("INFERENCE TEMPLATE")
