@@ -1,155 +1,35 @@
-import os
-import json
-import torch
+======================================================================
+ADAPTER FILES
+======================================================================
+['tokenizer.json', 'chat_template.jinja', 'adapter_model.safetensors', 'training_args.bin', 'tokenizer_config.json', 'README.md', 'adapter_config.json']
 
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from peft import PeftModel
-from safetensors.torch import load_file
+Adapter tensors: 504
+base_model.model.model.layers.0.mlp.down_proj.lora_A.weight (32, 12288) mean_abs= 0.004937679972499609 max_abs= 0.017333984375
+base_model.model.model.layers.0.mlp.down_proj.lora_B.weight (4096, 32) mean_abs= 0.001341562019661069 max_abs= 0.0078125
+base_model.model.model.layers.0.mlp.gate_proj.lora_A.weight (32, 4096) mean_abs= 0.008333534933626652 max_abs= 0.0283203125
+base_model.model.model.layers.0.mlp.gate_proj.lora_B.weight (12288, 32) mean_abs= 0.001608756254427135 max_abs= 0.01019287109375
+base_model.model.model.layers.0.mlp.up_proj.lora_A.weight (32, 4096) mean_abs= 0.008292291313409805 max_abs= 0.02392578125
+base_model.model.model.layers.0.mlp.up_proj.lora_B.weight (12288, 32) mean_abs= 0.0015282476088032126 max_abs= 0.00927734375
+base_model.model.model.layers.0.self_attn.k_proj.lora_A.weight (32, 4096) mean_abs= 0.007983759045600891 max_abs= 0.02197265625
+base_model.model.model.layers.0.self_attn.k_proj.lora_B.weight (1024, 32) mean_abs= 0.0012493837857618928 max_abs= 0.00634765625
+base_model.model.model.layers.0.self_attn.o_proj.lora_A.weight (32, 4096) mean_abs= 0.007991516031324863 max_abs= 0.0206298828125
+base_model.model.model.layers.0.self_attn.o_proj.lora_B.weight (4096, 32) mean_abs= 0.0011344905942678452 max_abs= 0.007354736328125
 
-BASE_MODEL = "Qwen/Qwen3-8B"
+======================================================================
+EXPECTED
+======================================================================
+{"category": "Economic_Harm", "persuasion": "plain"}
+Loading weights: 100%|██████████████████████████████████████████████████████████| 399/399 [00:01<00:00, 396.09it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 
-ADAPTER_PATH = (
-    "./outputs/safety_understanding/"
-    "best_adapter"
-)
+======================================================================
+PEFT STATUS
+======================================================================
+{'default': LoraConfig(task_type='CAUSAL_LM', peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, peft_version='0.21.2', base_model_name_or_path='Qwen/Qwen3-8B', revision=None, inference_mode=True, r=32, target_modules={'q_proj', 'up_proj', 'o_proj', 'down_proj', 'v_proj', 'gate_proj', 'k_proj'}, exclude_modules=None, lora_alpha=64, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', trainable_token_indices=None, loftq_config={}, eva_config=None, corda_config=None, lora_ga_config=None, use_dora=False, velora_config=None, alora_invocation_tokens=None, use_qalora=False, qalora_group_size=16, monteclora_config=None, layer_replication=None, runtime_config=LoraRuntimeConfig(ephemeral_gpu_offload=False), lora_bias=False, target_parameters=None, use_bdlora=None, arrow_config=None, kasa_config=None, ensure_weight_tying=False)}
 
-TRAIN_FILE = (
-    "training_data/"
-    "safety_understanding_train.jsonl"
-)
-
-# ============================================================
-# 1. INSPECT ADAPTER FILES
-# ============================================================
-
-print("=" * 70)
-print("ADAPTER FILES")
-print("=" * 70)
-
-print(os.listdir(ADAPTER_PATH))
-
-adapter_file = os.path.join(
-    ADAPTER_PATH,
-    "adapter_model.safetensors"
-)
-
-weights = load_file(adapter_file)
-
-print("\nAdapter tensors:", len(weights))
-
-for name, tensor in list(weights.items())[:10\]:
-    print(
-        name,
-        tuple(tensor.shape),
-        "mean_abs=",
-        float(tensor.abs().mean()),
-        "max_abs=",
-        float(tensor.abs().max()),
-    )
-
-
-# ============================================================
-# 2. LOAD EXACT FIRST TRAINING EXAMPLE
-# ============================================================
-
-with open(
-    TRAIN_FILE,
-    "r",
-    encoding="utf-8",
-) as f:
-    example = json.loads(next(f))
-
-messages = example["messages"]
-
-print("\n" + "=" * 70)
-print("EXPECTED")
-print("=" * 70)
-
-print(messages[2]["content"])
-
-
-# ============================================================
-# 3. LOAD MODEL
-# ============================================================
-
-tokenizer = AutoTokenizer.from_pretrained(
-    BASE_MODEL,
-    trust_remote_code=True,
-)
-
-base_model = AutoModelForCausalLM.from_pretrained(
-    BASE_MODEL,
-    dtype=torch.bfloat16,
-    device_map="auto",
-    trust_remote_code=True,
-)
-
-model = PeftModel.from_pretrained(
-    base_model,
-    ADAPTER_PATH,
-)
-
-model.eval()
-
-print("\n" + "=" * 70)
-print("PEFT STATUS")
-print("=" * 70)
-
-print(model.peft_config)
-
-print(
-    "\nActive adapter:",
-    model.active_adapter
-)
-
-
-# ============================================================
-# 4. BUILD EXACT INFERENCE CONTEXT
-# ============================================================
-
-text = tokenizer.apply_chat_template(
-    messages[:2],
-    tokenize=False,
-    add_generation_prompt=True,
-    enable_thinking=False,
-)
-
-inputs = tokenizer(
-    text,
-    return_ensors="pt",
-)
-
-inputs = {
+Active adapter: default
+Traceback (most recent call last):
+  File "/home/kunwar.zaid/ICON/diagnosis.py", line 123, in <module>
     k: v.to(model.device)
-    for k, v in inputs.items()
-}
-
-
-# ============================================================
-# 5. GENERATE
-# ============================================================
-
-with torch.inference_mode():
-
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=64,
-        do_sample=False,
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.eos_token_id,
-    )
-
-generated = outputs[0][
-    inputs["input_ids"].shape]
-
-prediction = tokenizer.decode(
-    generated,
-    skip_special_tokens=True,
-).strip()
-
-
-print("\n" + "=" * 70)
-print("LORA OUTPUT")
-print("=" * 70)
-
-print(repr(prediction))
+       ^^^^
+AttributeError: 'list' object has no attribute 'to'
