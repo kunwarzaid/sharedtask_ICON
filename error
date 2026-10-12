@@ -1,13 +1,7 @@
-# diagnose_system_prompt.py
-
 import json
 import torch
 
-from transformers import (
-    AutoTokenizer,
-    AutoModelForCausalLM,
-)
-
+from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 
 
@@ -22,10 +16,11 @@ ADAPTER_PATH = "./outputs/safety_understanding/best_adapter"
 VALID_FILE = "training_data/safety_understanding_valid.jsonl"
 
 NUM_EXAMPLES = 10
+MAX_NEW_TOKENS = 64
 
 
 # ============================================================
-# EXACT SYSTEM PROMPT USED FOR TRAINING
+# EXACT SYSTEM PROMPT USED DURING TRAINING
 # ============================================================
 
 TRAIN_SYSTEM_PROMPT = """You are a multilingual safety analysis system.
@@ -49,11 +44,9 @@ Schema:
 # LOAD VALIDATION DATA
 # ============================================================
 
-with open(
-    VALID_FILE,
-    "r",
-    encoding="utf-8",
-) as f:
+print("Loading validation data...")
+
+with open(VALID_FILE, "r", encoding="utf-8") as f:
     dataset = [
         json.loads(line)
         for line in f
@@ -79,7 +72,7 @@ if tokenizer.pad_token is None:
 
 
 # ============================================================
-# LOAD MODEL
+# LOAD BASE MODEL
 # ============================================================
 
 print("Loading base model...")
@@ -90,6 +83,11 @@ base_model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
     trust_remote_code=True,
 )
+
+
+# ============================================================
+# LOAD LORA ADAPTER
+# ============================================================
 
 print("Loading LoRA adapter...")
 
@@ -109,9 +107,11 @@ print("Active adapter:", model.active_adapter)
 
 device = next(model.parameters()).device
 
+print("Device:", device)
+
 
 # ============================================================
-# GENERATION FUNCTION
+# GENERATION
 # ============================================================
 
 def generate(system_prompt, user_prompt):
@@ -127,7 +127,7 @@ def generate(system_prompt, user_prompt):
         },
     ]
 
-    text = tokenizer.apply_chat_template(
+    prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=True,
@@ -135,25 +135,20 @@ def generate(system_prompt, user_prompt):
     )
 
     inputs = tokenizer(
-        text,
+        prompt,
         return_tensors="pt",
     )
 
-    # Move only tensors
-    inputs = {
-        key: (
-            value.to(device)
-            if torch.is_tensor(value)
-            else value
-        )
-        for key, value in inputs.items()
-    }
+    # Move tensors only.
+    for key in inputs:
+        if torch.is_tensor(inputs[key]):
+            inputs[key] = inputs[key].to(device)
 
     with torch.inference_mode():
 
         output = model.generate(
             **inputs,
-            max_new_tokens=64,
+            max_new_tokens=MAX_NEW_TOKENS,
             do_sample=False,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.eos_token_id,
@@ -162,7 +157,7 @@ def generate(system_prompt, user_prompt):
 
     prompt_length = inputs["input_ids"].shape[1]
 
-    generated_tokens = output[0][prompt_length:]
+    generated_tokens = output[0, prompt_length:]
 
     decoded = tokenizer.decode(
         generated_tokens,
@@ -173,18 +168,177 @@ def generate(system_prompt, user_prompt):
 
 
 # ============================================================
-# TEST FIRST 10 VALIDATION EXAMPLES
+# JSON PARSER
 # ============================================================
 
-validation_json_count = 0
-training_json_count = 0
+def parse_json(text):
+
+    try:
+        result = json.loads(text)
+
+        if isinstance(result, dict):
+            return result
+
+    except (json.JSONDecodeError, TypeError):
+        pass
+
+    return None
+
+
+# ============================================================
+# COUNTERS
+# ============================================================
+
+validation_json_success = 0
+training_json_success = 0
 
 validation_correct = 0
 training_correct = 0
 
 
-for idx, example in enumerate(dataset[:NUM_EXAMPLES]):
+# ============================================================
+# TEST FIRST N VALIDATION EXAMPLES
+# ============================================================
+
+num_examples = min(
+    NUM_EXAMPLES,
+    len(dataset),
+)
+
+for idx in range(num_examples):
+
+    example = dataset[idx]
 
     messages = example["messages"]
 
-    validation_system_prompt = 
+    validation_system_prompt = messages[0]["content"]
+
+    user_prompt = messages[1]["content"]
+
+    gold = json.loads(
+        messages[2]["content"]
+    )
+
+
+    # --------------------------------------------------------
+    # TEST A
+    # Use system prompt stored in validation file
+    # --------------------------------------------------------
+
+    validation_output = generate(
+        validation_system_prompt,
+        user_prompt,
+    )
+
+    validation_prediction = parse_json(
+        validation_output
+    )
+
+
+    # --------------------------------------------------------
+    # TEST B
+    # Same user prompt but exact training system prompt
+    # --------------------------------------------------------
+
+    training_output = generate(
+        TRAIN_SYSTEM_PROMPT,
+        user_prompt,
+    )
+
+    training_prediction = parse_json(
+        training_output
+    )
+
+
+    # --------------------------------------------------------
+    # SCORE A
+    # --------------------------------------------------------
+
+    if validation_prediction is not None:
+
+        validation_json_success += 1
+
+        if (
+            validation_prediction.get("category")
+            == gold["category"]
+            and
+            validation_prediction.get("persuasion")
+            == gold["persuasion"]
+        ):
+            validation_correct += 1
+
+
+    # --------------------------------------------------------
+    # SCORE B
+    # --------------------------------------------------------
+
+    if training_prediction is not None:
+
+        training_json_success += 1
+
+        if (
+            training_prediction.get("category")
+            == gold["category"]
+            and
+            training_prediction.get("persuasion")
+            == gold["persuasion"]
+        ):
+            training_correct += 1
+
+
+    # --------------------------------------------------------
+    # PRINT EXAMPLE
+    # --------------------------------------------------------
+
+    print("\n" + "=" * 70)
+    print(f"EXAMPLE {idx}")
+    print("=" * 70)
+
+    print("\nGOLD:")
+    print(gold)
+
+    print("\n[A] VALIDATION SYSTEM PROMPT OUTPUT:")
+    print(repr(validation_output))
+
+    print("PARSED:")
+    print(validation_prediction)
+
+    print("\n[B] TRAINING SYSTEM PROMPT OUTPUT:")
+    print(repr(training_output))
+
+    print("PARSED:")
+    print(training_prediction)
+
+
+# ============================================================
+# SUMMARY
+# ============================================================
+
+print("\n" + "=" * 70)
+print("SUMMARY")
+print("=" * 70)
+
+print("\nA. Validation system prompt")
+
+print(
+    f"Valid JSON: "
+    f"{validation_json_success}/{num_examples}"
+)
+
+print(
+    f"Joint correct: "
+    f"{validation_correct}/{num_examples}"
+)
+
+
+print("\nB. Exact training system prompt")
+
+print(
+    f"Valid JSON: "
+    f"{training_json_success}/{num_examples}"
+)
+
+print(
+    f"Joint correct: "
+    f"{training_correct}/{num_examples}"
+)
