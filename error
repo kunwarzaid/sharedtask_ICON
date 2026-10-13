@@ -1,2 +1,76 @@
-prompt_len = inputs["input_ids"].shape[1]
-raw = tokenizer.decode(out[0, prompt_len:], skip_special_tokens=True).strip()
+============================================================
+JSON validity:      1.0000
+Out-of-schema labels: 0 category, 0 persuasion
+Category accuracy:  0.9782 | macro-F1 0.9728
+Persuasion accuracy:0.9017 | macro-F1 0.9018
+Joint accuracy:     0.8866
+
+Per language:
+          json_ok  cat_ok  per_ok  joint_ok
+language                                   
+Bengali       1.0  0.9790  0.8908    0.8782
+English       1.0  0.9874  0.8992    0.8908
+Hindi         1.0  0.9874  0.9118    0.9034
+Marathi       1.0  0.9706  0.8950    0.8739
+Punjabi       1.0  0.9664  0.9118    0.8866
+
+Per category (category accuracy):
+gold_category
+Copyright           1.0000
+Economic_Harm       0.9857
+Financial           1.0000
+Fraud               0.9929
+Gov_Decision        0.9143
+Hate_Speech         0.9500
+Privacy_Violence    0.9619
+Name: cat_ok, dtype: float64
+
+Families with one consistent predicted category across 7 variants: 0.8941
+
+Category report:
+                  precision    recall  f1-score   support
+
+       Copyright     1.0000    1.0000    1.0000       420
+   Economic_Harm     0.9928    0.9857    0.9892       140
+       Financial     1.0000    1.0000    1.0000       105
+           Fraud     0.8968    0.9929    0.9424       140
+    Gov_Decision     0.9412    0.9143    0.9275       140
+     Hate_Speech     1.0000    0.9500    0.9744       140
+Privacy_Violence     0.9902    0.9619    0.9758       105
+
+        accuracy                         0.9782      1190
+       macro avg     0.9744    0.9721    0.9728      1190
+    weighted avg     0.9792    0.9782    0.9783      1190
+
+Category confusion (rows=gold, cols=pred): ['Copyright', 'Economic_Harm', 'Financial', 'Fraud', 'Gov_Decision', 'Hate_Speech', 'Privacy_Violence']
+[[420   0   0   0   0   0   0]
+ [  0 138   0   2   0   0   0]
+ [  0   0 105   0   0   0   0]
+ [  0   1   0 139   0   0   0]
+ [  0   0   0  11 128   0   1]
+ [  0   0   0   3   4 133   0]
+ [  0   0   0   0   4   0 101]]
+
+Persuasion report:
+                       precision    recall  f1-score   support
+
+                plain     1.0000    1.0000    1.0000       170
+       logical_appeal     0.8376    0.9706    0.8992       170
+authority_endorsement     1.0000    0.9588    0.9790       170
+    misrepresentation     0.9503    0.9000    0.9245       170
+            anchoring     0.7476    0.9059    0.8191       170
+              priming     0.8777    0.7176    0.7896       170
+    confirmation_bias     0.9481    0.8588    0.9012       170
+
+             accuracy                         0.9017      1190
+            macro avg     0.9087    0.9017    0.9018      1190
+         weighted avg     0.9087    0.9017    0.9018      1190
+
+Persuasion confusion (rows=gold, cols=pred): ['plain', 'logical_appeal', 'authority_endorsement', 'misrepresentation', 'anchoring', 'priming', 'confirmation_bias']
+[[170   0   0   0   0   0   0]
+ [  0 165   0   0   4   0   1]
+ [  0   1 163   0   5   0   1]
+ [  0  10   0 153   3   1   3]
+ [  0   6   0   0 154  10   0]
+ [  0  11   0   8  26 122   3]
+ [  0   4   0   0  14   6 146]]
