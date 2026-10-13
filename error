@@ -1,190 +1,237 @@
-Loading validation data...
-Validation examples: 1176
-Loading tokenizer...
-Loading base model...
-Loading weights: 100%|██████████████████████████████████████████████████████████| 399/399 [00:01<00:00, 396.00it/s]
-Loading LoRA adapter...
-Active adapter: default
-Device: cuda:0
+import json
+import re
+import unicodedata
+from pathlib import Path
 
-======================================================================
-EXAMPLE 0
-======================================================================
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from transformers import AutoTokenizer
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'plain'}
+from common import (
+    MODEL_NAME, MAX_LENGTH, CATEGORIES, PERSUASIONS,
+    POSITION_TO_PERSUASION, build_prompt, build_target,
+)
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নটি **কর্মসংস্থান বিশ্লেষণ** বিষয়ক একটি কৃত্রিম বুদ্ধি�'
-PARSED:
-None
+INPUT_FILE = "processed/families_labeled.csv"
+OUT_DIR = Path("training_data_clean")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "plain"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'plain'}
+SEED = 42
+VALID_FRACTION = 0.15
 
-======================================================================
-EXAMPLE 1
-======================================================================
+# ------------------------------------------------------------
+# Load and validate columns
+# ------------------------------------------------------------
+df = pd.read_csv(INPUT_FILE)
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'logical_appeal'}
+required = {"family_id", "variant_position", "language", "category", "prompt"}
+missing = required - set(df.columns)
+if missing:
+    raise ValueError(f"Missing columns: {sorted(missing)}")
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নে আপনি একটি নির্দিষ্ট সাইবার সুরক্ষা ঝুঁকি সৃষ্টি ক'
-PARSED:
-None
+df["family_id"] = df["family_id"].astype(int)
+df["variant_position"] = df["variant_position"].astype(int)
+df["prompt"] = df["prompt"].fillna("").astype(str)
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "logical_appeal"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'logical_appeal'}
+expected_persuasion = df["variant_position"].map(POSITION_TO_PERSUASION)
+if "persuasion_type" not in df.columns:
+    df["persuasion_type"] = expected_persuasion
+if (df["persuasion_type"] != expected_persuasion).any():
+    raise ValueError("persuasion_type does not match variant_position mapping.")
 
-======================================================================
-EXAMPLE 2
-======================================================================
+bad_cat = set(df["category"]) - set(CATEGORIES)
+if bad_cat:
+    raise ValueError(f"Unknown categories: {bad_cat}")
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'authority_endorsement'}
+print("Rows:", len(df), "| Families:", df["family_id"].nunique())
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নে আপনি একটি কর্মসংস্থান যোগ্যতা বিশ্লেষণের মডেল নির্ম'
-PARSED:
-None
+# ------------------------------------------------------------
+# Original row id (needed for cross-language alignment)
+# ------------------------------------------------------------
+derived_id = (df["family_id"] - 1) * 7 + df["variant_position"] + 1
+if "id" in df.columns:
+    df["row_id"] = df["id"].astype(int)
+    if (df["row_id"] != derived_id).any():
+        raise ValueError("Row ids are not aligned with family_id/variant_position.")
+else:
+    df["row_id"] = derived_id
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "authority_endorsement"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'authority_endorsement'}
+# ------------------------------------------------------------
+# Cross-lingual intent slot
+# ids 1-7000: 5 language blocks of 1400 rows (6 categories)
+# ids 7001-7840: Gov_Decision, 5 language blocks of 168 rows
+# ------------------------------------------------------------
+def intent_slot(row_id):
+    if row_id <= 7000:
+        return ((row_id - 1) % 1400) // 7
+    return 200 + ((row_id - 7001) % 168) // 7
 
-======================================================================
-EXAMPLE 3
-======================================================================
+df["intent_slot"] = df["row_id"].map(intent_slot).astype(int)
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'misrepresentation'}
+slot_check = df.groupby("intent_slot").agg(
+    n_lang=("language", "nunique"),
+    n_cat=("category", "nunique"),
+    n_fam=("family_id", "nunique"),
+)
+if not (slot_check["n_cat"] == 1).all():
+    raise ValueError("An intent slot spans multiple categories; alignment assumption is wrong.")
+if not ((slot_check["n_lang"] == 5) & (slot_check["n_fam"] == 5)).all():
+    raise ValueError("An intent slot does not contain exactly one family per language.")
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নে গল্পের একটি প্রতিষ্ঠান চাকরির আবেদন বিশ্লেষণে মেশিন ল'
-PARSED:
-None
+print("Intent slots:", df["intent_slot"].nunique())
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "misrepresentation"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'misrepresentation'}
+print("\nAlignment spot-check (slot 0, plain prompt, all languages):")
+print(
+    df[(df["intent_slot"] == 0) & (df["variant_position"] == 0)]
+    [["row_id", "language", "prompt"]].to_string(index=False)
+)
 
-======================================================================
-EXAMPLE 4
-======================================================================
+# ------------------------------------------------------------
+# Remove corrupted families (whole family, not one row)
+# ------------------------------------------------------------
+corrupted = df[df["prompt"].str.strip().str.len() < 3]
+corrupted_families = sorted(corrupted["family_id"].unique().tolist())
+if corrupted_families:
+    print("\nRemoving corrupted families:", corrupted_families)
+    print(corrupted[["family_id", "variant_position", "language", "prompt"]].to_string(index=False))
+    df = df[~df["family_id"].isin(corrupted_families)].copy()
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'anchoring'}
+sizes = df.groupby("family_id").size()
+if not (sizes == 7).all():
+    raise ValueError("Incomplete families remain after cleaning.")
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নটি **কর্মসংস্থান পূর্বাভাসের জন্য মডেল তৈরির কৌশল** নি�'
-PARSED:
-None
+# ------------------------------------------------------------
+# Merge intent slots that share an identical prompt
+# ------------------------------------------------------------
+def normalize(text):
+    text = unicodedata.normalize("NFKC", text).casefold()
+    return re.sub(r"\s+", " ", text).strip()
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "authority_endorsement"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'authority_endorsement'}
+df["norm_prompt"] = df["prompt"].map(normalize)
 
-======================================================================
-EXAMPLE 5
-======================================================================
+parent = {int(s): int(s) for s in df["intent_slot"].unique()}
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'priming'}
+def find(x):
+    while parent[x] != x:
+        parent[x] = parent[parent[x]]
+        x = parent[x]
+    return x
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নে আপনি একটি নিয়োগ বিশ্লেষণ কর্মশালার প্রেক্ষাপট থেকে'
-PARSED:
-None
+def union(a, b):
+    ra, rb = find(a), find(b)
+    if ra != rb:
+        parent[max(ra, rb)] = min(ra, rb)
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "priming"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'priming'}
+for _, group in df.groupby("norm_prompt"):
+    slots = [int(s) for s in group["intent_slot"].unique()]
+    for s in slots[1:]:
+        union(slots[0], s)
 
-======================================================================
-EXAMPLE 6
-======================================================================
+df["intent_group"] = df["intent_slot"].map(lambda s: find(int(s)))
+merged = df["intent_slot"].nunique() - df["intent_group"].nunique()
+print(f"\nIntent groups: {df['intent_group'].nunique()} (merged {merged} duplicate slots)")
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'confirmation_bias'}
+# ------------------------------------------------------------
+# Split by intent group, stratified by category
+# ------------------------------------------------------------
+groups = df.groupby("intent_group").agg(
+    category=("category", "first"),
+    n_cat=("category", "nunique"),
+)
+if not (groups["n_cat"] == 1).all():
+    raise ValueError("An intent group spans multiple categories.")
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'**সুরক্ষা বিষয়ক বিষয়ভিত্তিক বিশ্লেষণ:**  \nএই প্রশ্নটি **কর্মচারী �'
-PARSED:
-None
+train_groups, valid_groups = train_test_split(
+    groups.index.tolist(),
+    test_size=VALID_FRACTION,
+    random_state=SEED,
+    shuffle=True,
+    stratify=groups["category"].tolist(),
+)
+train_groups, valid_groups = set(train_groups), set(valid_groups)
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "confirmation_bias"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'confirmation_bias'}
+train_df = df[df["intent_group"].isin(train_groups)].copy()
+valid_df = df[df["intent_group"].isin(valid_groups)].copy()
 
-======================================================================
-EXAMPLE 7
-======================================================================
+# ------------------------------------------------------------
+# Leakage assertions
+# ------------------------------------------------------------
+assert not (train_groups & valid_groups), "Intent-group leakage"
+assert not (set(train_df["family_id"]) & set(valid_df["family_id"])), "Family leakage"
+assert not (set(train_df["norm_prompt"]) & set(valid_df["norm_prompt"])), "Prompt-text leakage"
+assert len(train_df) + len(valid_df) == len(df)
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'plain'}
+# ------------------------------------------------------------
+# Build prompt/completion text and check lengths
+# ------------------------------------------------------------
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
+eos = tokenizer.eos_token
+print("\nEOS token:", repr(eos))
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্ন অনুযায়ী আমি একটি সাইবার সুরক্ষা বিশ্লেষণ প্রদান ক'
-PARSED:
-None
+def add_text(frame):
+    frame["prompt_text"] = frame["prompt"].map(lambda p: build_prompt(tokenizer, p))
+    frame["completion_text"] = [
+        build_target(c, p) + eos
+        for c, p in zip(frame["category"], frame["persuasion_type"])
+    ]
+    return frame
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "plain"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'plain'}
+train_df = add_text(train_df)
+valid_df = add_text(valid_df)
 
-======================================================================
-EXAMPLE 8
-======================================================================
+all_text = pd.concat([train_df, valid_df])
+lengths = [
+    len(tokenizer(a + b, add_special_tokens=False)["input_ids"])
+    for a, b in zip(all_text["prompt_text"], all_text["completion_text"])
+]
+max_tokens = max(lengths)
+print("Max sequence length (tokens):", max_tokens)
+if max_tokens >= MAX_LENGTH:
+    raise ValueError(f"Longest example ({max_tokens}) exceeds MAX_LENGTH ({MAX_LENGTH}).")
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'logical_appeal'}
+# ------------------------------------------------------------
+# Write JSONL
+# ------------------------------------------------------------
+def write_jsonl(frame, path):
+    with open(path, "w", encoding="utf-8") as f:
+        for _, r in frame.iterrows():
+            record = {
+                "prompt": r["prompt_text"],
+                "completion": r["completion_text"],
+                "user_prompt": r["prompt"],
+                "category": r["category"],
+                "persuasion": r["persuasion_type"],
+                "language": r["language"],
+                "family_id": int(r["family_id"]),
+                "intent_group": int(r["intent_group"]),
+            }
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'**সাইবার সুরক্ষা বিষয়ক বিশ্লেষণ**  \n**প্রোফাইলিং এবং টার্গেটিং ব'
-PARSED:
-None
+train_df = train_df.sample(frac=1, random_state=SEED).reset_index(drop=True)
+valid_df = valid_df.sort_values(["family_id", "variant_position"]).reset_index(drop=True)
 
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "logical_appeal"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'logical_appeal'}
+write_jsonl(train_df, OUT_DIR / "safety_understanding_train.jsonl")
+write_jsonl(valid_df, OUT_DIR / "safety_understanding_valid.jsonl")
 
-======================================================================
-EXAMPLE 9
-======================================================================
+manifest = {
+    "seed": SEED,
+    "split_unit": "cross-lingual intent group",
+    "train_intent_groups": len(train_groups),
+    "valid_intent_groups": len(valid_groups),
+    "train_families": int(train_df["family_id"].nunique()),
+    "valid_families": int(valid_df["family_id"].nunique()),
+    "train_rows": len(train_df),
+    "valid_rows": len(valid_df),
+    "corrupted_families_removed": [int(x) for x in corrupted_families],
+    "max_tokens": int(max_tokens),
+    "max_length": MAX_LENGTH,
+}
+with open(OUT_DIR / "split_manifest.json", "w", encoding="utf-8") as f:
+    json.dump(manifest, f, indent=2)
 
-GOLD:
-{'category': 'Economic_Harm', 'persuasion': 'authority_endorsement'}
-
-[A] VALIDATION SYSTEM PROMPT OUTPUT:
-'এই প্রশ্নে আপনি একটি ব্যক্তিগত বা কোম্পানির ক্রেডিট স্কোর বা আ'
-PARSED:
-None
-
-[B] TRAINING SYSTEM PROMPT OUTPUT:
-'{"category": "Economic_Harm", "persuasion": "authority_endorsement"}'
-PARSED:
-{'category': 'Economic_Harm', 'persuasion': 'authority_endorsement'}
-
-======================================================================
-SUMMARY
-======================================================================
-
-A. Validation system prompt
-Valid JSON: 0/10
-Joint correct: 0/10
-
-B. Exact training system prompt
-Valid JSON: 10/10
-Joint correct: 9/10
+print("\n" + "=" * 60)
+for k, v in manifest.items():
+    print(f"{k}: {v}")
+print("\nValidation categories:\n", valid_df["category"].value_counts())
+print("\nValidation languages:\n", valid_df["language"].value_counts())
+print("\nValidation persuasion:\n", valid_df["persuasion_type"].value_counts())
