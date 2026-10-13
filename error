@@ -1,9 +1,2 @@
-Validation examples: 1190
-Evaluating:   0%|                                                                         | 0/1190 [00:00<?, ?it/s]
-[0] gold=(Economic_Harm, plain) raw='system{"'
-Evaluating:   0%|                                                                 | 1/1190 [00:01<37:40,  1.90s/it]
-[1] gold=(Economic_Harm, logical_appeal) raw='system{"'
-Evaluating:   0%|                                                                 | 2/1190 [00:03<33:39,  1.70s/it]
-[2] gold=(Economic_Harm, authority_endorsement) raw='system{"'
-Evaluating:   0%|▏                                                                | 3/1190 [00:04<31:57,  1.62s/it]
-[3] gold=(Economic_Harm, misrepresentation) raw='system{"'
+prompt_len = inputs["input_ids"].shape[1]
+raw = tokenizer.decode(out[0, prompt_len:], skip_special_tokens=True).strip()
