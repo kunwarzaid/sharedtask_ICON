@@ -1,24 +1,9 @@
-import math
-
-PER_DEVICE_BATCH = 8
-GRAD_ACCUM = 4
-EPOCHS = 3
-WARMUP_FRACTION = 0.05
-
-steps_per_epoch = math.ceil(
-    len(dataset["train"]) / (PER_DEVICE_BATCH * GRAD_ACCUM)
-)
-total_steps = steps_per_epoch * EPOCHS
-warmup_steps = max(1, math.ceil(WARMUP_FRACTION * total_steps))
-
-print("Steps per epoch:", steps_per_epoch)
-print("Total optimizer steps:", total_steps)
-print("Warmup steps:", warmup_steps)
-
-    num_train_epochs=EPOCHS,
-    ...
-    per_device_train_batch_size=PER_DEVICE_BATCH,
-    per_device_eval_batch_size=PER_DEVICE_BATCH,
-    gradient_accumulation_steps=GRAD_ACCUM,
-    ...
-    warmup_steps=warmup_steps,
+Validation examples: 1190
+Evaluating:   0%|                                                                         | 0/1190 [00:00<?, ?it/s]
+[0] gold=(Economic_Harm, plain) raw='system{"'
+Evaluating:   0%|                                                                 | 1/1190 [00:01<37:40,  1.90s/it]
+[1] gold=(Economic_Harm, logical_appeal) raw='system{"'
+Evaluating:   0%|                                                                 | 2/1190 [00:03<33:39,  1.70s/it]
+[2] gold=(Economic_Harm, authority_endorsement) raw='system{"'
+Evaluating:   0%|▏                                                                | 3/1190 [00:04<31:57,  1.62s/it]
+[3] gold=(Economic_Harm, misrepresentation) raw='system{"'
